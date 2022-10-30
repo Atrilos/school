@@ -1,51 +1,34 @@
 package ru.hogwarts.school.service;
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
-@Data
+@RequiredArgsConstructor
 public class FacultyService {
 
-    private final Map<Long, Faculty> faculties;
-    private Long idCounter;
-
-    public FacultyService() {
-        faculties = new HashMap<>();
-        idCounter = 0L;
-    }
+    private final FacultyRepository faculties;
 
     public Faculty addFaculty(Faculty faculty) {
-        faculty.setId(++idCounter);
-        faculties.put(faculty.getId(), faculty);
-        return faculty;
+        return faculties.save(faculty);
     }
 
-    public Faculty removeFaculty(Long id) {
-        Optional<Faculty> foundFaculty = Optional.ofNullable(faculties.remove(id));
-        if (foundFaculty.isEmpty()) {
-            throw new EntryNotFoundException("The specified faculty not found");
-        }
-        return foundFaculty.get();
+    public void removeFaculty(Long id) {
+        faculties.deleteById(id);
     }
 
     public Faculty updateFaculty(Faculty faculty) {
-        if (!faculties.containsKey(faculty.getId())) {
-            throw new EntryNotFoundException("The specified faculty not found");
-        }
-        faculties.put(faculty.getId(), faculty);
-        return faculty;
+        return faculties.save(faculty);
     }
 
     public Faculty getFacultyById(Long id) {
-        Optional<Faculty> foundFaculty = Optional.ofNullable(faculties.get(id));
+        Optional<Faculty> foundFaculty = faculties.findById(id);
         if (foundFaculty.isEmpty()) {
             throw new EntryNotFoundException("The specified faculty not found");
         }
@@ -53,8 +36,6 @@ public class FacultyService {
     }
 
     public Collection<Faculty> getFacultiesByColor(String color) {
-        return faculties.values().stream()
-                .filter(f -> f.getColor().equalsIgnoreCase(color))
-                .toList();
+        return faculties.findFacultiesByColor(color);
     }
 }
