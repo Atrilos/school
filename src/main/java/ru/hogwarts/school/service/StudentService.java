@@ -1,50 +1,34 @@
 package ru.hogwarts.school.service;
 
-import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
-@Data
+@RequiredArgsConstructor
 public class StudentService {
-    private final Map<Long, Student> students;
-    private Long idCounter;
 
-    public StudentService() {
-        students = new HashMap<>();
-        idCounter = 0L;
-    }
+    private final StudentRepository students;
 
     public Student addStudent(Student student) {
-        student.setId(++idCounter);
-        students.put(student.getId(), student);
-        return student;
+        return students.save(student);
     }
 
-    public Student removeStudent(Long id) {
-        Optional<Student> foundStudent = Optional.ofNullable(students.remove(id));
-        if (foundStudent.isEmpty()) {
-            throw new EntryNotFoundException("The specified student not found");
-        }
-        return foundStudent.get();
+    public void removeStudent(Long id) {
+        students.deleteById(id);
     }
 
     public Student updateStudent(Student student) {
-        if (!students.containsKey(student.getId())) {
-            throw new EntryNotFoundException("The specified faculty not found");
-        }
-        students.put(student.getId(), student);
-        return student;
+        return students.save(student);
     }
 
     public Student getStudentById(Long id) {
-        Optional<Student> foundStudent = Optional.ofNullable(students.get(id));
+        Optional<Student> foundStudent = students.findById(id);
         if (foundStudent.isEmpty()) {
             throw new EntryNotFoundException("The specified student not found");
         }
@@ -52,9 +36,6 @@ public class StudentService {
     }
 
     public Collection<Student> getStudentsByAge(int age) {
-        return students.values()
-                .stream()
-                .filter(s -> s.getAge() == age)
-                .toList();
+        return students.findStudentsByAge(age);
     }
 }
