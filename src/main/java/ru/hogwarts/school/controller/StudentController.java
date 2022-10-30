@@ -3,6 +3,7 @@ package ru.hogwarts.school.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -36,8 +37,19 @@ public class StudentController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping(params = "age")
     public ResponseEntity<Collection<Student>> getStudentsByAge(@RequestParam int age) {
         return ResponseEntity.ok(studentService.getStudentsByAge(age));
+    }
+
+    @GetMapping
+    public ResponseEntity<Collection<Student>> getStudentsByAgeBetween(@RequestParam int from,
+                                                                       @RequestParam int to) {
+        return ResponseEntity.ok(studentService.getStudentsByAgeBetween(from, to));
+    }
+
+    @GetMapping(params = "studentId")
+    public ResponseEntity<Faculty> getFacultyByStudentId(@RequestParam Long studentId) {
+        return ResponseEntity.ok(studentService.getFacultyByStudent(studentId));
     }
 }
