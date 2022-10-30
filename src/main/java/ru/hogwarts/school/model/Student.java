@@ -1,5 +1,6 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -16,10 +17,15 @@ import java.util.Objects;
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sid")
     private Long id;
     private String name;
     private int age;
+    @ManyToOne(fetch = FetchType.EAGER,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "faculty_id")
+    @ToString.Exclude
+    @JsonIgnore
+    private Faculty faculty;
 
     @Override
     public boolean equals(Object o) {
