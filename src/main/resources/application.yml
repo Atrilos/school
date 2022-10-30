@@ -1,1 +1,8 @@
-
+spring:
+  datasource:
+    url: ***REMOVED***
+    username: student
+    password: ***REMOVED***
+  jpa:
+    hibernate:
+      ddl-auto: update
