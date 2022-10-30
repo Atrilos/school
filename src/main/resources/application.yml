@@ -1,1 +1,8 @@
-
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hogwarts
+    username: student
+    password: chocolatefrog
+  jpa:
+    hibernate:
+      ddl-auto: update
