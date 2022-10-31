@@ -29,8 +29,9 @@ public class Student {
     @ToString.Exclude
     @JsonIgnore
     private Faculty faculty;
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
-    @JoinColumn(name = "avatar_id")
+    //TODO student should remain after avatar removal
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},
+            mappedBy = "student")
     @JsonIgnore
     @ToString.Exclude
     private Avatar avatar;
