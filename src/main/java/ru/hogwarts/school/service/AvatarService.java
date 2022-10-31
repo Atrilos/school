@@ -83,4 +83,8 @@ public class AvatarService {
     private String getExtension(String filename) {
         return filename.substring(filename.lastIndexOf(".") + 1);
     }
+
+    public void deleteAvatarById(Long avatarId) {
+        avatarRepository.deleteById(avatarId);
+    }
 }

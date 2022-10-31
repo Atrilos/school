@@ -28,9 +28,8 @@ public class Avatar {
     private String mediaType;
     @Column(name = "data")
     private byte[] data;
-    //TODO avatar should be deleted after dependent student removal
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.REFRESH},
-            orphanRemoval = true, mappedBy = "avatar")
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @JoinColumn(name = "student_id")
     @JsonIgnore
     @ToString.Exclude
     private Student student;

@@ -52,4 +52,9 @@ public class AvatarController {
             is.transferTo(os);
         }
     }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteAvatar(@PathVariable(name = "id") Long avatarId) {
+        avatarService.deleteAvatarById(avatarId);
+    }
 }
