@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.Collection;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,14 +28,18 @@ public class FacultyService {
     }
 
     public Faculty getFacultyById(Long id) {
-        Optional<Faculty> foundFaculty = faculties.findById(id);
-        if (foundFaculty.isEmpty()) {
-            throw new EntryNotFoundException("The specified faculty not found");
-        }
-        return foundFaculty.get();
+        return faculties.findById(id).orElseThrow(() -> new EntryNotFoundException("The specified faculty not found"));
     }
 
     public Collection<Faculty> getFacultiesByColor(String color) {
         return faculties.findFacultiesByColor(color);
+    }
+
+    public Collection<Faculty> getFacultiesByName(String name) {
+        return faculties.findFacultiesByName(name);
+    }
+
+    public Collection<Student> getFacultyStudents(String facultyName) {
+        return faculties.findByFacultyName(facultyName);
     }
 }

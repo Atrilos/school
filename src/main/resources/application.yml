@@ -1,8 +1,17 @@
+server:
+  port: 8080
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/hogwarts
     username: student
     password: chocolatefrog
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    show-sql: true
+  jackson:
+      serialization:
+        indent-output: true
