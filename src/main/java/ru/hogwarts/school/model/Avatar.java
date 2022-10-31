@@ -19,7 +19,7 @@ public class Avatar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long Id;
+    private Long id;
     @Column(name = "file_path")
     private String filePath;
     @Column(name = "file_size")
@@ -28,7 +28,7 @@ public class Avatar {
     private String mediaType;
     @Column(name = "data")
     private byte[] data;
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
+    @OneToOne
     @JoinColumn(name = "student_id")
     @JsonIgnore
     @ToString.Exclude
@@ -39,7 +39,7 @@ public class Avatar {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         Avatar avatar = (Avatar) o;
-        return Id != null && Objects.equals(Id, avatar.Id);
+        return id != null && Objects.equals(id, avatar.id);
     }
 
     @Override

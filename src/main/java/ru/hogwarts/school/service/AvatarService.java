@@ -76,8 +76,7 @@ public class AvatarService {
     }
 
     public Avatar findAvatarById(Long avatarId) {
-        Optional<Avatar> foundAvatar = avatarRepository.findById(avatarId);
-        return foundAvatar.orElseThrow(() -> new EntryNotFoundException("The specified avatar not found"));
+        return avatarRepository.findById(avatarId).orElseThrow(() -> new EntryNotFoundException("The specified avatar not found"));
     }
 
     private String getExtension(String filename) {
@@ -85,6 +84,6 @@ public class AvatarService {
     }
 
     public void deleteAvatarById(Long avatarId) {
-        avatarRepository.deleteById(avatarId);
+        avatarRepository.removeAvatarById(avatarId);
     }
 }
