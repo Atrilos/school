@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.Collection;
@@ -36,8 +37,18 @@ public class FacultyController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping(params = "color")
     public ResponseEntity<Collection<Faculty>> getFacultiesByColor(@RequestParam String color) {
         return ResponseEntity.ok(facultyService.getFacultiesByColor(color));
+    }
+
+    @GetMapping(params = "name")
+    public ResponseEntity<Collection<Faculty>> getFacultiesByName(@RequestParam String name) {
+        return ResponseEntity.ok(facultyService.getFacultiesByName(name));
+    }
+
+    @GetMapping(params = "facultyName")
+    public ResponseEntity<Collection<Student>> getFacultyStudents(@RequestParam String facultyName) {
+        return ResponseEntity.ok(facultyService.getFacultyStudents(facultyName));
     }
 }
