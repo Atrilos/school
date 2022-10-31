@@ -2,12 +2,16 @@ server:
   port: 8080
 
 spring:
+  sql:
+    init:
+      mode: always
   datasource:
     url: ***REMOVED***
     username: student
     password: ***REMOVED***
     driver-class-name: org.postgresql.Driver
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
@@ -15,3 +19,11 @@ spring:
   jackson:
       serialization:
         indent-output: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+#Constants
+path:
+  to:
+    avatars:
+      folder: /avatars
