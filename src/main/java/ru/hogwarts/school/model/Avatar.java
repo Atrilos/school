@@ -7,42 +7,39 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.util.Objects;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "student")
-public class Student {
+@Table(name = "avatar")
+public class Avatar {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "age")
-    private int age;
-    @ManyToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "faculty_id")
-    @ToString.Exclude
-    @JsonIgnore
-    private Faculty faculty;
-    @OneToOne(cascade = CascadeType.ALL,
-            mappedBy = "student",
-            orphanRemoval = true
-    )
+    @Column(name = "file_path")
+    private String filePath;
+    @Column(name = "file_size")
+    private long fileSize;
+    @Column(name = "media_type")
+    private String mediaType;
+    @Column(name = "data")
+    private byte[] data;
+    @OneToOne
+    @JoinColumn(name = "student_id")
     @JsonIgnore
     @ToString.Exclude
-    private Avatar avatar;
+    private Student student;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        Student student = (Student) o;
-        return id != null && Objects.equals(id, student.id);
+        Avatar avatar = (Avatar) o;
+        return id != null && Objects.equals(id, avatar.id);
     }
 
     @Override
