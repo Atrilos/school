@@ -18,8 +18,11 @@ import java.util.Objects;
 public class Faculty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "name")
     private String name;
+    @Column(name = "color")
     private String color;
     @OneToMany(mappedBy = "faculty")
     @ToString.Exclude
