@@ -29,6 +29,11 @@ public class Student {
     @ToString.Exclude
     @JsonIgnore
     private Faculty faculty;
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.REFRESH})
+    @JoinColumn(name = "avatar_id")
+    @JsonIgnore
+    @ToString.Exclude
+    private Avatar avatar;
 
     @Override
     public boolean equals(Object o) {
