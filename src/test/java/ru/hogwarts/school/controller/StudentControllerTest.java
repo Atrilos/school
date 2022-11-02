@@ -8,12 +8,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -38,26 +34,38 @@ import static ru.hogwarts.school.controller.constants.StudentControllerTestConst
 @ActiveProfiles("test")
 class StudentControllerTest {
 
-    @Autowired
-    private WebTestClient webTestClient;
-
-    @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private FacultyRepository facultyRepository;
-
     private static final Gson GSON = new Gson();
-
-
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:alpine"));
+    @Autowired
+    private WebTestClient webTestClient;
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private FacultyRepository facultyRepository;
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url=", postgreSQLContainer::getJdbcUrl);
         registry.add("spring.datasource.username=", postgreSQLContainer::getUsername);
         registry.add("spring.datasource.password=", postgreSQLContainer::getPassword);
+    }
+
+    public static Stream<Arguments> provideParamsForStudentsFoundByAgeBetweenCorrectTest() {
+        return Stream.of(
+                Arguments.of(20, 21, 2),
+                Arguments.of(19, 20, 2),
+                Arguments.of(0, 20, 2),
+                Arguments.of(0, 25, 3)
+        );
+    }
+
+    public static Stream<Arguments> provideParamsForStudentsFoundByAgeBetweenOutOfBoundsTest() {
+        return Stream.of(
+                Arguments.of(15, 19),
+                Arguments.of(19, 19),
+                Arguments.of(25, 30)
+        );
     }
 
     @AfterEach
@@ -142,11 +150,11 @@ class StudentControllerTest {
         Student notExpected = deepCopyAndChangeId(BASIC_STUDENT_3, secondId);
         final int age = 20;
         List<?> list = (List<?>) webTestClient.get()
-                        .uri("/student?age={age}", age)
-                        .exchange()
-                        .expectStatus().isOk()
-                        .expectBody(List.class)
-                        .returnResult().getResponseBody();
+                .uri("/student?age={age}", age)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(List.class)
+                .returnResult().getResponseBody();
         List<Student> resultList = list.stream().map(o -> GSON.fromJson(GSON.toJsonTree(o), Student.class)).toList();
         assertThat(resultList).contains(expected).doesNotContain(notExpected);
     }
@@ -195,22 +203,5 @@ class StudentControllerTest {
                 .expectBody(Faculty.class)
                 .returnResult().getResponseBody();
         assertThat(expectedFaculty).isEqualTo(actualFaculty);
-    }
-
-    public static Stream<Arguments> provideParamsForStudentsFoundByAgeBetweenCorrectTest() {
-        return Stream.of(
-                Arguments.of(20, 21, 2),
-                Arguments.of(19, 20, 2),
-                Arguments.of(0, 20, 2),
-                Arguments.of(0, 25, 3)
-        );
-    }
-
-    public static Stream<Arguments> provideParamsForStudentsFoundByAgeBetweenOutOfBoundsTest() {
-        return Stream.of(
-                Arguments.of(15, 19),
-                Arguments.of(19, 19),
-                Arguments.of(25, 30)
-        );
     }
 }

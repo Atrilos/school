@@ -32,8 +32,8 @@ import static ru.hogwarts.school.controller.constants.StudentControllerTestConst
 @WebMvcTest(FacultyController.class)
 class FacultyControllerTest {
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
     private static final Gson GSON = new Gson();
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -93,16 +93,22 @@ class FacultyControllerTest {
 
     @Test
     public void shouldUpdateFacultyCorrectly() throws Exception {
-        when(facultyRepository.save(any(Faculty.class))).thenReturn(basicFaculty);
+        when(facultyRepository.save(any(Faculty.class)))
+                .thenAnswer(answer -> answer.getArgument(0));
+        Faculty newFaculty = Faculty.builder()
+                .id(basicFaculty.getId())
+                .name("blu")
+                .color("Blue")
+                .build();
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/faculty")
-                        .content(objectMapper.writeValueAsString(basicFaculty))
+                        .content(objectMapper.writeValueAsString(newFaculty))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(basicFaculty.getId()))
-                .andExpect(jsonPath("$.name").value(basicFaculty.getName()))
-                .andExpect(jsonPath("$.color").value(basicFaculty.getColor()));
+                .andExpect(jsonPath("$.id").value(newFaculty.getId()))
+                .andExpect(jsonPath("$.name").value(newFaculty.getName()))
+                .andExpect(jsonPath("$.color").value(newFaculty.getColor()));
     }
 
     @Test
