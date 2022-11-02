@@ -14,6 +14,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -32,7 +34,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static ru.hogwarts.school.controller.constants.StudentControllerTestConstants.*;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(initializers = {StudentControllerTest.Initializer.class})
 @Testcontainers
 @ActiveProfiles("test")
 class StudentControllerTest {
@@ -52,16 +53,11 @@ class StudentControllerTest {
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:alpine"));
 
-    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-
-        @Override
-        public void initialize(ConfigurableApplicationContext applicationContext) {
-            TestPropertyValues.of(
-                    "spring.datasource.url=" + postgreSQLContainer.getJdbcUrl(),
-                    "spring.datasource.username=" + postgreSQLContainer.getUsername(),
-                    "spring.datasource.password=" + postgreSQLContainer.getPassword()
-            ).applyTo(applicationContext.getEnvironment());
-        }
+    @DynamicPropertySource
+    static void registerProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url=", postgreSQLContainer::getJdbcUrl);
+        registry.add("spring.datasource.username=", postgreSQLContainer::getUsername);
+        registry.add("spring.datasource.password=", postgreSQLContainer::getPassword);
     }
 
     @AfterEach
