@@ -24,7 +24,7 @@ public class Student {
     private String name;
     @Column(name = "age")
     private int age;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "faculty_id")
     @ToString.Exclude
     @JsonIgnore

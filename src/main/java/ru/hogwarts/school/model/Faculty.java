@@ -25,7 +25,7 @@ public class Faculty {
     private String name;
     @Column(name = "color")
     private String color;
-    @OneToMany(mappedBy = "faculty", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "faculty")
     @ToString.Exclude
     @JsonIgnore
     private List<Student> students;
