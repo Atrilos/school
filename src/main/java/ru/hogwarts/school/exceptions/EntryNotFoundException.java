@@ -1,6 +1,6 @@
 package ru.hogwarts.school.exceptions;
 
-public class EntryNotFoundException extends RuntimeException{
+public class EntryNotFoundException extends RuntimeException {
     public EntryNotFoundException() {
         super();
     }
