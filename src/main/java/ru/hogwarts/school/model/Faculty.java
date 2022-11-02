@@ -13,6 +13,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "faculty")
 public class Faculty {
@@ -24,7 +25,7 @@ public class Faculty {
     private String name;
     @Column(name = "color")
     private String color;
-    @OneToMany(mappedBy = "faculty")
+    @OneToMany(mappedBy = "faculty", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @ToString.Exclude
     @JsonIgnore
     private List<Student> students;
