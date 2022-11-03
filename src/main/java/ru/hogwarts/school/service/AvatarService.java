@@ -25,10 +25,10 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @RequiredArgsConstructor
 public class AvatarService {
 
-    @Value("${path.to.avatars.folder}")
-    private String avatarsDir;
     private final AvatarRepository avatarRepository;
     private final StudentService studentService;
+    @Value("${path.to.avatars.folder}")
+    private String avatarsDir;
 
     @SuppressWarnings("all")
     public void uploadAvatar(Long studentId, MultipartFile avatar) throws IOException {

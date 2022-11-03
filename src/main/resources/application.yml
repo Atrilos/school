@@ -17,8 +17,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     show-sql: true
   jackson:
-      serialization:
-        indent-output: true
+    serialization:
+      indent-output: true
   servlet:
     multipart:
       max-file-size: 10MB
