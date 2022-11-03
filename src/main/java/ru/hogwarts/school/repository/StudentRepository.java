@@ -20,7 +20,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     Collection<Student> findStudentsByAgeBetween(int from, int to);
 
     @Query("""
-    SELECT s.faculty FROM Student s where s.id = ?1
-    """)
+            SELECT s.faculty FROM Student s where s.id = ?1
+            """)
     Faculty findStudentsFaculty(Long id);
 }

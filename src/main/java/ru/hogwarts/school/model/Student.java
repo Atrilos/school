@@ -13,6 +13,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity
+@Builder
 @Table(name = "student")
 public class Student {
     @Id
@@ -23,13 +24,13 @@ public class Student {
     private String name;
     @Column(name = "age")
     private int age;
-    @ManyToOne(fetch = FetchType.EAGER,
-            cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "faculty_id")
     @ToString.Exclude
     @JsonIgnore
     private Faculty faculty;
-    @OneToOne(cascade = CascadeType.ALL,
+    @OneToOne(
+            cascade = CascadeType.ALL,
             mappedBy = "student",
             orphanRemoval = true
     )
