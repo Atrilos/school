@@ -1,6 +1,5 @@
 package ru.hogwarts.school.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -27,14 +26,12 @@ public class Student {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "faculty_id")
     @ToString.Exclude
-    @JsonIgnore
     private Faculty faculty;
     @OneToOne(
             cascade = CascadeType.ALL,
-            mappedBy = "student",
             orphanRemoval = true
     )
-    @JsonIgnore
+    @JoinColumn(name = "avatar_id")
     @ToString.Exclude
     private Avatar avatar;
 

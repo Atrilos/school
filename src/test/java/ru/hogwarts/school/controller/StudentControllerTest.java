@@ -71,6 +71,7 @@ class StudentControllerTest {
     @AfterEach
     public void deleteEntities() {
         studentRepository.deleteAll();
+        facultyRepository.deleteAll();
     }
 
     private Student deepCopyAndChangeId(Student student, long id) {
