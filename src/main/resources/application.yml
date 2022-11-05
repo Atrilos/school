@@ -2,18 +2,15 @@ server:
   port: 8080
 
 spring:
-  sql:
-    init:
-      mode: always
   datasource:
     url: ***REMOVED***
     username: student
     password: ***REMOVED***
     driver-class-name: org.postgresql.Driver
   jpa:
-    defer-datasource-initialization: true
+    defer-datasource-initialization: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     show-sql: true
   jackson:
@@ -26,4 +23,4 @@ spring:
 path:
   to:
     avatars:
-      folder: /avatars
+      folder: ./avatars

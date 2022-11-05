@@ -1,6 +1,5 @@
 package ru.hogwarts.school.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -13,6 +12,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "avatar")
 public class Avatar {
 
@@ -28,11 +28,6 @@ public class Avatar {
     private String mediaType;
     @Column(name = "data")
     private byte[] data;
-    @OneToOne
-    @JoinColumn(name = "student_id")
-    @JsonIgnore
-    @ToString.Exclude
-    private Student student;
 
     @Override
     public boolean equals(Object o) {
