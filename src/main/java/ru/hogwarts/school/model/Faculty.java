@@ -1,6 +1,5 @@
 package ru.hogwarts.school.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -27,7 +26,6 @@ public class Faculty {
     private String color;
     @OneToMany(mappedBy = "faculty")
     @ToString.Exclude
-    @JsonIgnore
     private List<Student> students;
 
     @Override
