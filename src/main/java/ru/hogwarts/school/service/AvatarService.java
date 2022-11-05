@@ -2,12 +2,13 @@ package ru.hogwarts.school.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
 import ru.hogwarts.school.model.Avatar;
-import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
 
 import javax.imageio.ImageIO;
@@ -16,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -26,29 +26,31 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class AvatarService {
 
     private final AvatarRepository avatarRepository;
-    private final StudentService studentService;
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
     @SuppressWarnings("all")
-    public void uploadAvatar(Long studentId, MultipartFile avatar) throws IOException {
-        Student student = studentService.getStudentById(studentId);
-        Path filePath = Path.of(avatarsDir, student + "." + getExtension(avatar.getOriginalFilename()));
+    public void uploadAvatar(MultipartFile multipartFile) throws IOException {
+        Avatar avatar = create(multipartFile);
+        Path filePath = Path.of(avatarsDir, avatar.getId() + "." + getExtension(multipartFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
-        try (InputStream is = avatar.getInputStream();
+        try (InputStream is = multipartFile.getInputStream();
              OutputStream os = Files.newOutputStream(filePath, CREATE_NEW);
              BufferedInputStream bis = new BufferedInputStream(is, 1024);
              BufferedOutputStream bos = new BufferedOutputStream(os, 1024)) {
             bis.transferTo(bos);
         }
-        Avatar foundAvatar = findAvatarByStudentId(studentId);
-        foundAvatar.setStudent(student);
-        foundAvatar.setFilePath(filePath.toString());
-        foundAvatar.setFileSize(avatar.getSize());
-        foundAvatar.setMediaType(avatar.getContentType());
-        foundAvatar.setData(generateImagePreview(filePath));
-        avatarRepository.save(foundAvatar);
+        avatar.setData(generateImagePreview(filePath));
+        avatar.setFilePath(filePath.toString());
+    }
+
+    private Avatar create(MultipartFile multipartFile) {
+        Avatar avatar = Avatar.builder()
+                .fileSize(multipartFile.getSize())
+                .mediaType(multipartFile.getContentType())
+                .build();
+        return avatarRepository.save(avatar);
     }
 
     private byte[] generateImagePreview(Path filePath) throws IOException {
@@ -70,20 +72,36 @@ public class AvatarService {
         }
     }
 
-    public Avatar findAvatarByStudentId(Long studentId) {
-        Optional<Avatar> foundAvatar = avatarRepository.findByStudentId(studentId);
-        return foundAvatar.orElse(new Avatar());
-    }
-
-    public Avatar findAvatarById(Long avatarId) {
-        return avatarRepository.findById(avatarId).orElseThrow(() -> new EntryNotFoundException("The specified avatar not found"));
+    protected Avatar getAvatarById(Long avatarId) {
+        return avatarRepository
+                .findById(avatarId)
+                .orElseThrow(() -> new EntryNotFoundException("The specified avatar not found"));
     }
 
     private String getExtension(String filename) {
-        return filename.substring(filename.lastIndexOf(".") + 1);
+        return filename
+                .substring(filename.lastIndexOf(".") + 1);
     }
 
     public void deleteAvatarById(Long avatarId) {
-        avatarRepository.removeAvatarById(avatarId);
+        getAvatarById(avatarId);
+        avatarRepository
+                .removeAvatarById(avatarId);
+    }
+
+    public ResponseEntity<byte[]> readFromDb(Long id) {
+        Avatar avatar = getAvatarById(id);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(avatar.getMediaType()))
+                .contentLength(avatar.getData().length)
+                .body(avatar.getData());
+    }
+
+    public ResponseEntity<byte[]> readFromFs(Long id) throws IOException {
+        Avatar avatar = getAvatarById(id);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(avatar.getMediaType()))
+                .contentLength(avatar.getFileSize())
+                .body(Files.readAllBytes(Path.of(avatar.getFilePath())));
     }
 }
