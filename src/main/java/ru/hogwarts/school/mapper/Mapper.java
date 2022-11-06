@@ -1,26 +1,50 @@
 package ru.hogwarts.school.mapper;
 
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.model.dto.AvatarDto;
+import ru.hogwarts.school.model.dto.FacultyDto;
 import ru.hogwarts.school.model.dto.NewStudentDto;
 import ru.hogwarts.school.model.dto.StudentDto;
 import ru.hogwarts.school.repository.AvatarRepository;
 import ru.hogwarts.school.repository.FacultyRepository;
 
-@Mapper(componentModel = "spring",
-        uses = {AvatarMapper.class, FacultyMapper.class},
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
-public abstract class StudentMapper {
+@Component
+@RequiredArgsConstructor
+public class Mapper {
+    private final ModelMapper modelMapper;
+    private final AvatarRepository avatarRepository;
+    private final FacultyRepository facultyRepository;
+    @Value("${server.port}")
+    private String port;
 
-    @Autowired
-    private AvatarRepository avatarRepository;
-    @Autowired
-    private FacultyRepository facultyRepository;
+    public AvatarDto toDto(Avatar avatar) {
+        AvatarDto avatarDto = modelMapper.map(avatar, AvatarDto.class);
+        avatarDto.setUrl("http://localhost:%s/avatar/%d/from-db".formatted(port, avatar.getId()));
+        return avatarDto;
+    }
+
+    public FacultyDto toDto(Faculty faculty) {
+        return modelMapper.map(faculty, FacultyDto.class);
+    }
+
+    public Faculty toEntity(FacultyDto facultyDto) {
+        return modelMapper.map(facultyDto, Faculty.class);
+    }
+
+    public StudentDto toDto(Student student) {
+        return modelMapper.map(student, StudentDto.class);
+    }
+
+    public Student toEntity(StudentDto studentDto) {
+        return modelMapper.map(studentDto, Student.class);
+    }
 
     public Student toEntity(NewStudentDto studentDto) {
         Student.StudentBuilder student = Student.builder()
@@ -43,8 +67,4 @@ public abstract class StudentMapper {
                 .avatar(avatar)
                 .build();
     }
-
-    public abstract StudentDto toDto(Student student);
-
-    public abstract Student toEntity(StudentDto studentDto);
 }

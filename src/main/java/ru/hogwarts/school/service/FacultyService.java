@@ -3,8 +3,7 @@ package ru.hogwarts.school.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
-import ru.hogwarts.school.mapper.FacultyMapper;
-import ru.hogwarts.school.mapper.StudentMapper;
+import ru.hogwarts.school.mapper.Mapper;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.dto.FacultyDto;
 import ru.hogwarts.school.model.dto.StudentDto;
@@ -16,58 +15,57 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class FacultyService {
 
-    private final FacultyRepository faculties;
-    private final FacultyMapper facultyMapper;
-    private final StudentMapper studentMapper;
+    private final FacultyRepository facultyRepository;
+    private final Mapper mapper;
 
     public FacultyDto addFaculty(FacultyDto faculty) {
         faculty.setId(null);
-        Faculty facultyToAdd = facultyMapper.toEntity(faculty);
-        return facultyMapper.toDto(faculties.save(facultyToAdd));
+        Faculty facultyToAdd = mapper.toEntity(faculty);
+        return mapper.toDto(facultyRepository.save(facultyToAdd));
     }
 
     public void removeFaculty(Long id) {
         getFacultyById(id);
-        faculties.deleteById(id);
+        facultyRepository.deleteById(id);
     }
 
     public FacultyDto updateFaculty(long id, FacultyDto faculty) {
         Faculty foundFaculty = getFacultyById(id);
         foundFaculty.setName(faculty.getName());
         foundFaculty.setColor(faculty.getColor());
-        return facultyMapper.toDto(faculties.save(foundFaculty));
+        return mapper.toDto(facultyRepository.save(foundFaculty));
     }
 
     public Collection<FacultyDto> getFacultiesByColor(String color) {
-        return faculties.
+        return facultyRepository.
                 findFacultiesByColor(color)
                 .stream()
-                .map(facultyMapper::toDto)
+                .map(mapper::toDto)
                 .toList();
     }
 
     public Collection<FacultyDto> getFacultiesByName(String name) {
-        return faculties
+        return facultyRepository
                 .findFacultiesByName(name)
                 .stream()
-                .map(facultyMapper::toDto)
+                .map(mapper::toDto)
                 .toList();
     }
 
     public Collection<StudentDto> getFacultyStudents(String facultyName) {
-        return faculties
+        return facultyRepository
                 .findByFacultyName(facultyName)
                 .stream()
-                .map(studentMapper::toDto)
+                .map(mapper::toDto)
                 .toList();
     }
 
     public FacultyDto getFaculty(Long id) {
-        return facultyMapper.toDto(getFacultyById(id));
+        return mapper.toDto(getFacultyById(id));
     }
 
     protected Faculty getFacultyById(Long id) {
-        return faculties
+        return facultyRepository
                 .findById(id)
                 .orElseThrow(() -> new EntryNotFoundException("The specified faculty not found"));
     }

@@ -1,9 +1,9 @@
 package ru.hogwarts.school.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,8 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
+import ru.hogwarts.school.mapper.Mapper;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.AvatarRepository;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.service.FacultyService;
 
@@ -33,13 +35,18 @@ import static ru.hogwarts.school.controller.constants.StudentControllerTestConst
 class FacultyControllerTest {
 
     private static final Gson GSON = new Gson();
-    private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
     private FacultyRepository facultyRepository;
+    @MockBean
+    private AvatarRepository avatarRepository;
     @SpyBean
     private FacultyService facultyService;
+    @SpyBean
+    private Mapper mapper;
+    @SpyBean
+    private ModelMapper modelMapper;
     private Faculty basicFaculty;
 
     @BeforeEach
@@ -82,7 +89,7 @@ class FacultyControllerTest {
         when(facultyRepository.save(any(Faculty.class))).thenReturn(basicFaculty);
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/faculty")
-                        .content(objectMapper.writeValueAsString(basicFaculty))
+                        .content(GSON.toJson(basicFaculty))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -95,14 +102,16 @@ class FacultyControllerTest {
     public void shouldUpdateFacultyCorrectly() throws Exception {
         when(facultyRepository.save(any(Faculty.class)))
                 .thenAnswer(answer -> answer.getArgument(0));
+        when(facultyRepository.findById(any(Long.class)))
+                .thenReturn(Optional.ofNullable(basicFaculty));
         Faculty newFaculty = Faculty.builder()
                 .id(basicFaculty.getId())
                 .name("blu")
                 .color("Blue")
                 .build();
         mockMvc.perform(MockMvcRequestBuilders
-                        .put("/faculty")
-                        .content(objectMapper.writeValueAsString(newFaculty))
+                        .put("/faculty/{id}", 1)
+                        .content(GSON.toJson(newFaculty))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

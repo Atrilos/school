@@ -119,7 +119,7 @@ class StudentControllerTest {
         Long id = studentRepository.save(BASIC_STUDENT).getId();
         Student expected = deepCopyAndChangeId(BASIC_STUDENT_2, id);
         Student actual = webTestClient.put()
-                .uri("/student")
+                .uri("/student/{id}", id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(GSON.toJson(expected))
                 .exchange()
@@ -150,7 +150,7 @@ class StudentControllerTest {
         Student expected = deepCopyAndChangeId(BASIC_STUDENT, firstId);
         Student notExpected = deepCopyAndChangeId(BASIC_STUDENT_3, secondId);
         final int age = 20;
-        List<?> list = (List<?>) webTestClient.get()
+        List<?> list = webTestClient.get()
                 .uri("/student?age={age}", age)
                 .exchange()
                 .expectStatus().isOk()
@@ -166,7 +166,7 @@ class StudentControllerTest {
         studentRepository.save(BASIC_STUDENT);
         studentRepository.save(BASIC_STUDENT_2);
         studentRepository.save(BASIC_STUDENT_3);
-        List<?> list = (List<?>) webTestClient.get()
+        List<?> list = webTestClient.get()
                 .uri("/student?from={from}&to={to}", from, to)
                 .exchange()
                 .expectStatus().isOk()
@@ -181,7 +181,7 @@ class StudentControllerTest {
         studentRepository.save(BASIC_STUDENT);
         studentRepository.save(BASIC_STUDENT_2);
         studentRepository.save(BASIC_STUDENT_3);
-        List<?> list = (List<?>) webTestClient.get()
+        List<?> list = webTestClient.get()
                 .uri("/student?from={from}&to={to}", from, to)
                 .exchange()
                 .expectStatus().isOk()
