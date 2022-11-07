@@ -2,13 +2,16 @@ package ru.hogwarts.school.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
+import ru.hogwarts.school.mapper.Mapper;
 import ru.hogwarts.school.model.Avatar;
+import ru.hogwarts.school.model.dto.AvatarDto;
 import ru.hogwarts.school.repository.AvatarRepository;
 
 import javax.imageio.ImageIO;
@@ -17,6 +20,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -26,6 +30,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class AvatarService {
 
     private final AvatarRepository avatarRepository;
+    private final Mapper mapper;
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
@@ -103,5 +108,15 @@ public class AvatarService {
                 .contentType(MediaType.parseMediaType(avatar.getMediaType()))
                 .contentLength(avatar.getFileSize())
                 .body(Files.readAllBytes(Path.of(avatar.getFilePath())));
+    }
+
+    public List<AvatarDto> getPage(int pageNumber, int pageSize) {
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        return avatarRepository
+                .findAll(pageRequest)
+                .getContent()
+                .stream()
+                .map(mapper::toDto)
+                .toList();
     }
 }

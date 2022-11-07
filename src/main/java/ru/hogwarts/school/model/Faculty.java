@@ -7,12 +7,12 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
-@Getter
-@Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "faculty")
 public class Faculty {
@@ -30,8 +30,10 @@ public class Faculty {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (this == o)
+            return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
+            return false;
         Faculty faculty = (Faculty) o;
         return id != null && Objects.equals(id, faculty.id);
     }
