@@ -1,6 +1,6 @@
-package ru.hogwarts.school.controller.constants;
+package ru.hogwarts.student.controller.constants;
 
-import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.student.model.Faculty;
 
 public class FacultyControllerTestConstants {
     public static final Faculty FACULTY_1 = new Faculty(2L, "blU", "Blue", null);

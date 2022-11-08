@@ -1,4 +1,4 @@
-package ru.hogwarts.school.exceptions;
+package ru.hogwarts.student.exceptions;
 
 public class EntryNotFoundException extends RuntimeException {
     public EntryNotFoundException() {

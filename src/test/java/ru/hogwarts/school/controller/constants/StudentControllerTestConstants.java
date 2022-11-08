@@ -1,6 +1,6 @@
-package ru.hogwarts.school.controller.constants;
+package ru.hogwarts.student.controller.constants;
 
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.student.model.Student;
 
 public class StudentControllerTestConstants {
     public static final Student BASIC_STUDENT = new Student(0L, "B", 20, null, null);

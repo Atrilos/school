@@ -1,16 +1,16 @@
-package ru.hogwarts.school.service;
+package ru.hogwarts.student;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.exceptions.EntryNotFoundException;
-import ru.hogwarts.school.mapper.Mapper;
-import ru.hogwarts.school.model.Avatar;
-import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.model.dto.FacultyDto;
-import ru.hogwarts.school.model.dto.NewStudentDto;
-import ru.hogwarts.school.model.dto.StudentDto;
-import ru.hogwarts.school.repository.StudentRepository;
+import ru.hogwarts.student.exceptions.EntryNotFoundException;
+import ru.hogwarts.student.mapper.Mapper;
+import ru.hogwarts.student.model.Avatar;
+import ru.hogwarts.student.model.Faculty;
+import ru.hogwarts.student.model.Student;
+import ru.hogwarts.student.model.dto.FacultyDto;
+import ru.hogwarts.student.model.dto.NewStudentDto;
+import ru.hogwarts.student.model.dto.StudentDto;
+import ru.hogwarts.student.repository.StudentRepository;
 
 import java.util.Collection;
 

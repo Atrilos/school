@@ -1,13 +1,13 @@
-package ru.hogwarts.school.controller;
+package ru.hogwarts.student.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.school.model.dto.FacultyDto;
-import ru.hogwarts.school.model.dto.StudentDto;
-import ru.hogwarts.school.service.FacultyService;
+import ru.hogwarts.student.model.dto.FacultyDto;
+import ru.hogwarts.student.model.dto.StudentDto;
+import ru.hogwarts.student.service.FacultyService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;

@@ -1,4 +1,4 @@
-package ru.hogwarts.school.controller;
+package ru.hogwarts.student.controller;
 
 import com.google.gson.Gson;
 import org.junit.jupiter.api.AfterEach;
@@ -17,17 +17,17 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.repository.FacultyRepository;
-import ru.hogwarts.school.repository.StudentRepository;
+import ru.hogwarts.student.model.Faculty;
+import ru.hogwarts.student.model.Student;
+import ru.hogwarts.student.repository.FacultyRepository;
+import ru.hogwarts.student.repository.StudentRepository;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import static ru.hogwarts.school.controller.constants.StudentControllerTestConstants.*;
+import static ru.hogwarts.student.controller.constants.StudentControllerTestConstants.*;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Testcontainers

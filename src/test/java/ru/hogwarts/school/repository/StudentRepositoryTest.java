@@ -1,4 +1,4 @@
-package ru.hogwarts.school.repository;
+package ru.hogwarts.student.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
-import ru.hogwarts.school.model.Student;
+import ru.hogwarts.student.model.Student;
 
 import java.util.List;
 

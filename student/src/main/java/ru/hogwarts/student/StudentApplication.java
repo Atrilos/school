@@ -6,10 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @OpenAPIDefinition
-public class SchoolApp {
+public class StudentApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SchoolApp.class, args);
+        SpringApplication.run(StudentApplication.class, args);
     }
-
 }

@@ -1,4 +1,4 @@
-package ru.hogwarts.school.model.dto;
+package ru.hogwarts.student.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * A DTO for the {@link ru.hogwarts.school.model.Faculty} entity
+ * A DTO for the {@link ru.hogwarts.student.model.Faculty} entity
  */
 @Data
 @Builder

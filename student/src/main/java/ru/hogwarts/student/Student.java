@@ -1,4 +1,4 @@
-package ru.hogwarts.school.model;
+package ru.hogwarts.student;
 
 import lombok.*;
 import org.hibernate.Hibernate;

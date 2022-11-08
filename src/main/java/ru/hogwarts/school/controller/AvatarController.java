@@ -1,12 +1,12 @@
-package ru.hogwarts.school.controller;
+package ru.hogwarts.student.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hogwarts.school.model.dto.AvatarDto;
-import ru.hogwarts.school.service.AvatarService;
+import ru.hogwarts.student.model.dto.AvatarDto;
+import ru.hogwarts.student.service.AvatarService;
 
 import java.io.IOException;
 import java.util.List;

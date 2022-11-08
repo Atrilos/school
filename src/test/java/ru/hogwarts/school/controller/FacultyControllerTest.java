@@ -1,4 +1,4 @@
-package ru.hogwarts.school.controller;
+package ru.hogwarts.student.controller;
 
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,13 +11,13 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.hogwarts.school.exceptions.EntryNotFoundException;
-import ru.hogwarts.school.mapper.Mapper;
-import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.repository.AvatarRepository;
-import ru.hogwarts.school.repository.FacultyRepository;
-import ru.hogwarts.school.service.FacultyService;
+import ru.hogwarts.student.exceptions.EntryNotFoundException;
+import ru.hogwarts.student.mapper.Mapper;
+import ru.hogwarts.student.model.Faculty;
+import ru.hogwarts.student.model.Student;
+import ru.hogwarts.student.repository.AvatarRepository;
+import ru.hogwarts.student.repository.FacultyRepository;
+import ru.hogwarts.student.service.FacultyService;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,9 +27,9 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.hogwarts.school.controller.constants.FacultyControllerTestConstants.*;
-import static ru.hogwarts.school.controller.constants.StudentControllerTestConstants.BASIC_STUDENT;
-import static ru.hogwarts.school.controller.constants.StudentControllerTestConstants.BASIC_STUDENT_2;
+import static ru.hogwarts.student.controller.constants.FacultyControllerTestConstants.*;
+import static ru.hogwarts.student.controller.constants.StudentControllerTestConstants.BASIC_STUDENT;
+import static ru.hogwarts.student.controller.constants.StudentControllerTestConstants.BASIC_STUDENT_2;
 
 @WebMvcTest(FacultyController.class)
 class FacultyControllerTest {

@@ -1,4 +1,4 @@
-package ru.hogwarts.school.service;
+package ru.hogwarts.student.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,11 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hogwarts.school.exceptions.EntryNotFoundException;
-import ru.hogwarts.school.mapper.Mapper;
-import ru.hogwarts.school.model.Avatar;
-import ru.hogwarts.school.model.dto.AvatarDto;
-import ru.hogwarts.school.repository.AvatarRepository;
+import ru.hogwarts.student.exceptions.EntryNotFoundException;
+import ru.hogwarts.student.mapper.Mapper;
+import ru.hogwarts.student.model.Avatar;
+import ru.hogwarts.student.model.dto.AvatarDto;
+import ru.hogwarts.student.repository.AvatarRepository;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

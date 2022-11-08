@@ -1,1 +1,8 @@
 rootProject.name = 'school'
+include 'student'
+include 'faculty'
+include 'avatar'
+include 'clients'
+include 'apigw'
+include 'eureka-server'
+

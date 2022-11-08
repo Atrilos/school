@@ -1,4 +1,4 @@
-package ru.hogwarts.school.exceptions;
+package ru.hogwarts.student.exceptions;
 
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
-import ru.hogwarts.school.exceptions.model.CustomError;
+import ru.hogwarts.student.exceptions.model.CustomError;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;

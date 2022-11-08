@@ -1,4 +1,4 @@
-package ru.hogwarts.school.model.dto;
+package ru.hogwarts.student.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
