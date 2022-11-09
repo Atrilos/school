@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS car
 );
 
 ALTER TABLE person
-    ADD CONSTRAINT fk_person_on_car FOREIGN KEY (car_id) REFERENCES car;
+    ADD CONSTRAINT fk_person_on_car FOREIGN KEY (car_id) REFERENCES car
+        ON DELETE SET NULL;
 
 --- test
 
@@ -30,3 +31,7 @@ VALUES ('A', 'A1', 100.0);
 
 INSERT INTO person (name, car_id)
 VALUES ('Will', 1);
+
+delete
+from car
+where car_id = 1;
