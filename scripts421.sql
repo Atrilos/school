@@ -21,13 +21,14 @@ CREATE TABLE IF NOT EXISTS student
 );
 
 ALTER TABLE student
-    ADD CONSTRAINT FK_STUDENT_ON_FACULTY FOREIGN KEY (faculty_id) REFERENCES faculty (id);
+    ADD CONSTRAINT FK_STUDENT_ON_FACULTY FOREIGN KEY (faculty_id) REFERENCES faculty (id)
+        ON DELETE SET NULL;
 
 ---test
 
 INSERT INTO student (name)
 VALUES ('A');
 
-SELECT (
-SELECT age FROM student
-WHERE id = 1) = 20;
+SELECT (SELECT age
+        FROM student
+        WHERE id = 1) = 20;
