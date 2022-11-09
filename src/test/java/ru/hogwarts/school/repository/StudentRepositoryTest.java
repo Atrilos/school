@@ -74,8 +74,7 @@ class StudentRepositoryTest {
         Student student5 = new Student(null, "E", 20, null, null);
         Student student6 = new Student(null, "F", 20, null, null);
 
-        List<Student> list = List.of(student1, student2, student3, student4, student5, student6);
-        list.forEach(entityManager::persistAndFlush);
+        List.of(student1, student2, student3, student4, student5, student6).forEach(entityManager::persistAndFlush);
 
         assertThat(studentRepository.findLast5Students())
                 .containsExactlyInAnyOrder(student2, student3, student4, student5, student6);
