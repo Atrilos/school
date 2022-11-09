@@ -3,18 +3,24 @@ package ru.hogwarts.student;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.shared.faculty.dto.FacultyDto;
+import ru.hogwarts.shared.student.dto.NewStudentDto;
+import ru.hogwarts.shared.student.dto.StudentDto;
 import ru.hogwarts.student.model.dto.FacultyDto;
 import ru.hogwarts.student.model.dto.NewStudentDto;
 import ru.hogwarts.student.model.dto.StudentDto;
 import ru.hogwarts.student.service.StudentService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 
 @RestController
 @RequestMapping("/student")
 @RequiredArgsConstructor
+@Validated
 public class StudentController {
 
     private final StudentService studentService;
@@ -22,6 +28,11 @@ public class StudentController {
     @GetMapping("/{id}")
     public ResponseEntity<StudentDto> getStudent(@PathVariable long id) {
         return ResponseEntity.ok(studentService.getStudent(id));
+    }
+
+    @GetMapping(params = "facultyName")
+    public ResponseEntity<Collection<StudentDto>> getFacultyStudents(@RequestParam @NotBlank String facultyName) {
+        return ResponseEntity.ok(studentService.getFacultyStudents(facultyName));
     }
 
     @PostMapping

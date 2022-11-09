@@ -1,4 +1,4 @@
-package ru.hogwarts.student.exceptions.model;
+package ru.hogwarts.shared.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

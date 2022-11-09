@@ -1,4 +1,4 @@
-package ru.hogwarts.student.service;
+package ru.hogwarts.avatar;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,11 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hogwarts.student.exceptions.EntryNotFoundException;
-import ru.hogwarts.student.mapper.Mapper;
-import ru.hogwarts.student.model.Avatar;
-import ru.hogwarts.student.model.dto.AvatarDto;
-import ru.hogwarts.student.repository.AvatarRepository;
+import ru.hogwarts.shared.avatar.Avatar;
+import ru.hogwarts.shared.avatar.dto.AvatarDto;
+import ru.hogwarts.shared.mapper.Mapper;
+;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -77,7 +76,7 @@ public class AvatarService {
         }
     }
 
-    protected Avatar getAvatarById(Long avatarId) {
+    public Avatar getAvatarById(Long avatarId) {
         return avatarRepository
                 .findById(avatarId)
                 .orElseThrow(() -> new EntryNotFoundException("The specified avatar not found"));

@@ -1,10 +1,12 @@
-package ru.hogwarts.student.controller;
+package ru.hogwarts.avatar;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts.shared.avatar.Avatar;
+import ru.hogwarts.shared.avatar.dto.AvatarDto;
 import ru.hogwarts.student.model.dto.AvatarDto;
 import ru.hogwarts.student.service.AvatarService;
 
@@ -30,8 +32,13 @@ public class AvatarController {
     }
 
     @GetMapping(value = "/{id}/from-file")
-    public ResponseEntity<byte[]> downloadAvatar(@PathVariable Long id) throws IOException {
+    public ResponseEntity<byte[]> readFromFs(@PathVariable Long id) throws IOException {
         return avatarService.readFromFs(id);
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Avatar> getAvatarById(@PathVariable Long id) {
+        return ResponseEntity.ok(avatarService.getAvatarById(id));
     }
 
     @DeleteMapping(value = "/{id}")

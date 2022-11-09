@@ -3,6 +3,8 @@ package ru.hogwarts.student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import ru.hogwarts.shared.faculty.Faculty;
+import ru.hogwarts.shared.student.Student;
 import ru.hogwarts.student.model.Faculty;
 import ru.hogwarts.student.model.Student;
 
@@ -42,4 +44,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             LIMIT 5
             """, nativeQuery = true)
     List<Student> findLast5Students();
+
+    @Query("select s from Student s where s.faculty.name = ?1")
+    Collection<Student> findStudentsByFacultyName(String facultyName);
 }

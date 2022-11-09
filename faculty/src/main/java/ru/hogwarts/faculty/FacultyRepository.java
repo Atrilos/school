@@ -1,8 +1,10 @@
-package ru.hogwarts.student.repository;
+package ru.hogwarts.faculty;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import ru.hogwarts.shared.faculty.Faculty;
+import ru.hogwarts.shared.student.Student;
 import ru.hogwarts.student.model.Faculty;
 import ru.hogwarts.student.model.Student;
 

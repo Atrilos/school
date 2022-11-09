@@ -6,10 +6,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("com.google.code.gson:gson:${gsonVersion}")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation(project(":shared"))
     runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
-    implementation("org.modelmapper:modelmapper:${modelMapperVersion}")
 }
 
 

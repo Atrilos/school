@@ -2,7 +2,7 @@ rootProject.name = 'school'
 include 'student'
 include 'faculty'
 include 'avatar'
-include 'clients'
+include 'shared'
 include 'apigw'
 include 'eureka-server'
 

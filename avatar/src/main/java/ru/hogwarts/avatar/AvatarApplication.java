@@ -1,4 +1,4 @@
-package ru.hogwarts.student;
+package ru.hogwarts.avatar;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.boot.SpringApplication;
@@ -8,11 +8,11 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
 
+@OpenAPIDefinition
 @SpringBootApplication(scanBasePackages = {
-        "ru.hogwarts.student",
+        "ru.hogwarts.avatar",
         "ru.hogwarts.shared"
 })
-@OpenAPIDefinition
 @EnableEurekaClient
 @EnableFeignClients(
         basePackages = "ru.hogwarts.shared"
@@ -20,9 +20,9 @@ import org.springframework.context.annotation.PropertySources;
 @PropertySources({
         @PropertySource("classpath:clients-${spring.profiles.active}.properties")
 })
-public class StudentApplication {
+public class AvatarApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(StudentApplication.class, args);
+        SpringApplication.run(AvatarApplication.class, args);
     }
 }
