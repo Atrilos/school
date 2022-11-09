@@ -8,10 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hogwarts.shared.avatar.Avatar;
-import ru.hogwarts.shared.avatar.dto.AvatarDto;
+import ru.hogwarts.shared.avatar.AvatarDto;
 import ru.hogwarts.shared.exceptions.EntryNotFoundException;
-import ru.hogwarts.shared.mapper.Mapper;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -23,7 +21,6 @@ import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
-;
 
 @Service
 @Transactional
@@ -31,7 +28,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class AvatarService {
 
     private final AvatarRepository avatarRepository;
-    private final Mapper mapper;
+    private final AvatarMapper mapper;
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 

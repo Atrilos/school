@@ -27,7 +27,7 @@ subprojects {
         gsonVersion = '2.10'
         modelMapperVersion = '3.1.0'
         testcontainers = '1.17.5'
-        openaiVersion = '1.6.12'
+        openapiVersion = '1.6.12'
     }
 
     configurations {

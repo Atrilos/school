@@ -1,18 +1,15 @@
-package ru.hogwarts.shared.student.dto;
+package ru.hogwarts.shared.student;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.hogwarts.shared.avatar.dto.AvatarDto;
-import ru.hogwarts.shared.faculty.dto.FacultyDto;
+import ru.hogwarts.shared.avatar.AvatarDto;
+import ru.hogwarts.shared.faculty.FacultyDto;
 
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-/**
- * A DTO for the {@link ru.hogwarts.shared.student.Student} entity
- */
 @Data
 @Builder
 @NoArgsConstructor

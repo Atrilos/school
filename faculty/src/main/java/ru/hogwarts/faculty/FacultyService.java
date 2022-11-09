@@ -2,10 +2,8 @@ package ru.hogwarts.faculty;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hogwarts.shared.faculty.Faculty;
-import ru.hogwarts.shared.faculty.dto.FacultyDto;
-import ru.hogwarts.shared.mapper.Mapper;
-import ru.hogwarts.shared.student.dto.StudentDto;
+import ru.hogwarts.shared.exceptions.EntryNotFoundException;
+import ru.hogwarts.shared.faculty.FacultyDto;
 
 import java.util.Collection;
 
@@ -14,7 +12,7 @@ import java.util.Collection;
 public class FacultyService {
 
     private final FacultyRepository facultyRepository;
-    private final Mapper mapper;
+    private final FacultyMapper mapper;
 
     public FacultyDto addFaculty(FacultyDto faculty) {
         faculty.setId(null);
@@ -50,9 +48,19 @@ public class FacultyService {
                 .toList();
     }
 
-    public Faculty getFacultyById(Long id) {
+    protected Faculty getFacultyById(Long id) {
         return facultyRepository
                 .findById(id)
-                .orElseThrow(() -> new FacultyNotFound("The specified faculty not found"));
+                .orElseThrow(() -> new EntryNotFoundException("The specified faculty not found"));
+    }
+
+    public FacultyDto getFaculty(Long id) {
+        return mapper.toDto(getFacultyById(id));
+    }
+
+    public FacultyDto getFacultyByStudent(Long studentId) {
+        Faculty faculty = facultyRepository.findFacultiesByStudentId(studentId)
+                .orElseThrow(() -> new EntryNotFoundException("The specified faculty not found"));
+        return mapper.toDto(faculty);
     }
 }

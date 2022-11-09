@@ -2,16 +2,11 @@ package ru.hogwarts.student;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.hogwarts.shared.avatar.Avatar;
 import ru.hogwarts.shared.avatar.AvatarClient;
 import ru.hogwarts.shared.exceptions.EntryNotFoundException;
-import ru.hogwarts.shared.faculty.Faculty;
 import ru.hogwarts.shared.faculty.FacultyClient;
-import ru.hogwarts.shared.faculty.dto.FacultyDto;
-import ru.hogwarts.shared.mapper.Mapper;
-import ru.hogwarts.shared.student.Student;
-import ru.hogwarts.shared.student.dto.NewStudentDto;
-import ru.hogwarts.shared.student.dto.StudentDto;
+import ru.hogwarts.shared.student.NewStudentDto;
+import ru.hogwarts.shared.student.StudentDto;
 
 import java.util.Collection;
 
@@ -22,7 +17,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final FacultyClient facultyClient;
     private final AvatarClient avatarClient;
-    private final Mapper mapper;
+    private final StudentMapper mapper;
 
     public StudentDto addStudent(NewStudentDto student) {
         Student studentToAdd = mapper.toEntity(student);
@@ -34,24 +29,12 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public StudentDto updateStudent(long id, StudentDto student) {
+    public StudentDto updateStudent(long id, NewStudentDto student) {
         Student foundStudent = getStudentById(id);
-
-        Faculty faculty = null;
-        if (student.getFaculty() != null)
-            faculty = facultyClient
-                    .getFaculty(student.getFaculty().getId())
-                    .getBody();
-
-        Avatar avatar = null;
-        if (student.getAvatar() != null)
-            avatar = avatarClient
-                    .getAvatarById(student.getAvatar().getId())
-                    .getBody();
-
         foundStudent.setName(student.getName());
-        foundStudent.setFaculty(faculty);
-        foundStudent.setAvatar(avatar);
+        foundStudent.setAge(student.getAge());
+        foundStudent.setAvatarId(student.getAvatarId());
+        foundStudent.setFacultyId(student.getFacultyId());
         return mapper.toDto(studentRepository.save(foundStudent));
     }
 
@@ -74,11 +57,6 @@ public class StudentService {
                 .toList();
     }
 
-    public FacultyDto getFacultyByStudent(Long studentId) {
-        Faculty faculty = studentRepository.findStudentsFaculty(studentId);
-        return mapper.toDto(faculty);
-    }
-
     public StudentDto getStudent(long id) {
         Student foundStudent = getStudentById(id);
         return mapper.toDto(foundStudent);
@@ -86,10 +64,7 @@ public class StudentService {
 
     public StudentDto patchStudentAvatar(long id, long avatarId) {
         Student student = getStudentById(id);
-        Avatar avatar = avatarClient
-                .getAvatarById(avatarId)
-                .getBody();
-        student.setAvatar(avatar);
+        student.setAvatarId(avatarId);
         return mapper.toDto(studentRepository.save(student));
     }
 

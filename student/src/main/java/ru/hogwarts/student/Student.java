@@ -1,9 +1,7 @@
-package ru.hogwarts.shared.student;
+package ru.hogwarts.student;
 
 import lombok.*;
 import org.hibernate.Hibernate;
-import ru.hogwarts.shared.avatar.Avatar;
-import ru.hogwarts.shared.faculty.Faculty;
 
 import javax.persistence.*;
 import java.util.Objects;

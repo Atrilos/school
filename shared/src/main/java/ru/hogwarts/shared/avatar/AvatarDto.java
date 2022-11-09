@@ -1,4 +1,4 @@
-package ru.hogwarts.shared.avatar.dto;
+package ru.hogwarts.shared.avatar;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,9 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-/**
- * A DTO for the {@link ru.hogwarts.shared.avatar.Avatar} entity
- */
 @Data
 @Builder
 @NoArgsConstructor

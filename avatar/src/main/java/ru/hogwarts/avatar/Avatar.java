@@ -1,4 +1,4 @@
-package ru.hogwarts.shared.faculty;
+package ru.hogwarts.avatar;
 
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -13,16 +13,21 @@ import java.util.Objects;
 @Setter
 @ToString
 @Entity
-@Table(name = "faculty")
-public class Faculty {
+@Table(name = "avatar")
+public class Avatar {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "color")
-    private String color;
+    @Column(name = "file_path")
+    private String filePath;
+    @Column(name = "file_size")
+    private long fileSize;
+    @Column(name = "media_type")
+    private String mediaType;
+    @Column(name = "data")
+    private byte[] data;
 
     @Override
     public boolean equals(Object o) {
@@ -30,8 +35,8 @@ public class Faculty {
             return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o))
             return false;
-        Faculty faculty = (Faculty) o;
-        return id != null && Objects.equals(id, faculty.id);
+        Avatar avatar = (Avatar) o;
+        return id != null && Objects.equals(id, avatar.id);
     }
 
     @Override

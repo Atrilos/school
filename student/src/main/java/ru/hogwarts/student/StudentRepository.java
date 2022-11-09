@@ -3,8 +3,6 @@ package ru.hogwarts.student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import ru.hogwarts.shared.faculty.Faculty;
-import ru.hogwarts.shared.student.Student;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,13 +16,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query(value = "SELECT * FROM student WHERE age BETWEEN ?1 AND ?2",
             nativeQuery = true)
     Collection<Student> findStudentsByAgeBetween(int from, int to);
-
-    @Query("""
-            SELECT s.faculty
-            FROM Student s
-            WHERE s.id = ?1
-            """)
-    Faculty findStudentsFaculty(Long id);
 
     @Query(value = """
             SELECT count(*) FROM student
@@ -43,6 +34,10 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             """, nativeQuery = true)
     List<Student> findLast5Students();
 
-    @Query("select s from Student s where s.faculty.name = ?1")
+    @Query(value = """
+            SELECT s from Student s
+            JOIN faculty f ON s.faculty_id = f.id
+            WHERE f.name = ?1
+            """, nativeQuery = true)
     Collection<Student> findStudentsByFacultyName(String facultyName);
 }

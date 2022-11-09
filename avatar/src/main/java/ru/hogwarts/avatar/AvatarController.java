@@ -5,15 +5,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.hogwarts.shared.avatar.Avatar;
-import ru.hogwarts.shared.avatar.dto.AvatarDto;
+import ru.hogwarts.shared.avatar.AvatarDto;
 
 import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/avatar")
 public class AvatarController {
 
     private final AvatarService avatarService;

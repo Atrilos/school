@@ -9,18 +9,43 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: student
-          uri: lb://STUDENT
+        - id: student-service
+          uri: lb://student-service
           predicates:
             - Path=/student/**
-        - id: faculty
-          uri: lb://FACULTY
+          filters:
+            - RewritePath=/student/(?<path>.*), /$\{path}
+        - id: faculty-service
+          uri: lb://faculty-service
           predicates:
             - Path=/faculty/**
-        - id: avatar
-          uri: lb://AVATAR
+          filters:
+            - RewritePath=/faculty/(?<path>.*), /$\{path}
+        - id: avatar-service
+          uri: lb://avatar-service
           predicates:
             - Path=/avatar/**
+          filters:
+            - RewritePath=/avatar/(?<path>.*), /$\{path}
+        - id: openapi
+          uri: http://localhost:${server.port}
+          predicates:
+            - Path=/v3/api-docs/**
+          filters:
+            - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+      discovery:
+        locator:
+          enabled: true
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: student
+        url: /v3/api-docs/student
+      - name: faculty
+        url: /v3/api-docs/faculty
+      - name: avatar
+        url: /v3/api-docs/avatar
 
 eureka:
   client:

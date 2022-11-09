@@ -5,16 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.hogwarts.shared.faculty.dto.FacultyDto;
-import ru.hogwarts.shared.student.dto.NewStudentDto;
-import ru.hogwarts.shared.student.dto.StudentDto;
+import ru.hogwarts.shared.student.NewStudentDto;
+import ru.hogwarts.shared.student.StudentDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/student")
 @RequiredArgsConstructor
 @Validated
 public class StudentController {
@@ -38,7 +36,7 @@ public class StudentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<StudentDto> updateStudent(@PathVariable long id,
-                                                    @RequestBody @Valid StudentDto student) {
+                                                    @RequestBody @Valid NewStudentDto student) {
         return ResponseEntity.ok(studentService.updateStudent(id, student));
     }
 
@@ -57,11 +55,6 @@ public class StudentController {
     public ResponseEntity<Collection<StudentDto>> getStudentsByAgeBetween(@RequestParam int from,
                                                                           @RequestParam int to) {
         return ResponseEntity.ok(studentService.getStudentsByAgeBetween(from, to));
-    }
-
-    @GetMapping(params = "studentId")
-    public ResponseEntity<FacultyDto> getFacultyByStudentId(@RequestParam Long studentId) {
-        return ResponseEntity.ok(studentService.getFacultyByStudent(studentId));
     }
 
     @PatchMapping("/{id}/avatar")
