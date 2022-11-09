@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * A DTO for the {@link ru.hogwarts.student.model.Student} entity
+ * A DTO for the {@link ru.hogwarts.shared.student.Student} entity
  */
 @Data
 @Builder
@@ -21,7 +21,7 @@ public class StudentDto implements Serializable {
     private Long id;
     @NotBlank(message = "Name can't be blank")
     private String name;
-    private int age;
+    private Integer age;
     private FacultyDto faculty;
     private AvatarDto avatar;
 }

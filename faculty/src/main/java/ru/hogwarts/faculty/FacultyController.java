@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.shared.faculty.Faculty;
 import ru.hogwarts.shared.faculty.dto.FacultyDto;
 import ru.hogwarts.shared.student.dto.StudentDto;
-import ru.hogwarts.student.model.dto.FacultyDto;
-import ru.hogwarts.student.model.dto.StudentDto;
-import ru.hogwarts.student.service.FacultyService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -54,10 +51,5 @@ public class FacultyController {
     @GetMapping(params = "name")
     public ResponseEntity<Collection<FacultyDto>> getFacultiesByName(@RequestParam @NotBlank String name) {
         return ResponseEntity.ok(facultyService.getFacultiesByName(name));
-    }
-
-    @GetMapping(params = "facultyName")
-    public ResponseEntity<Collection<StudentDto>> getFacultyStudents(@RequestParam @NotBlank String facultyName) {
-        return ResponseEntity.ok(facultyService.getFacultyStudents(facultyName));
     }
 }

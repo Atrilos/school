@@ -24,18 +24,11 @@ public class Student {
     @Column(name = "name")
     private String name;
     @Column(name = "age")
-    private int age;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "faculty_id")
-    @ToString.Exclude
-    private Faculty faculty;
-    @OneToOne(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    @JoinColumn(name = "avatar_id")
-    @ToString.Exclude
-    private Avatar avatar;
+    private Integer age;
+    @Column(name = "faculty_id")
+    private Long facultyId;
+    @Column(name = "avatar_id")
+    private Long avatarId;
 
     @Override
     public boolean equals(Object o) {

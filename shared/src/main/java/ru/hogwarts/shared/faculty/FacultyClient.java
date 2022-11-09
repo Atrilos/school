@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
         url = "${clients.faculty.url}"
 )
 public interface FacultyClient {
-    @GetMapping("/{id}")
+    @GetMapping("faculty/{id}")
     ResponseEntity<Faculty> getFaculty(@PathVariable Long id);
 }

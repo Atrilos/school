@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.shared.avatar.Avatar;
 import ru.hogwarts.shared.avatar.dto.AvatarDto;
+import ru.hogwarts.shared.exceptions.EntryNotFoundException;
 import ru.hogwarts.shared.mapper.Mapper;
-;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -22,6 +22,8 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
+
+;
 
 @Service
 @Transactional

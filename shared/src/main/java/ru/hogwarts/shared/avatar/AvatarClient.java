@@ -19,6 +19,6 @@ public interface AvatarClient {
     @GetMapping(value = "/avatar/{id}/from-file")
     ResponseEntity<byte[]> downloadAvatar(@PathVariable Long id) throws IOException;
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/avatar/{id}")
     ResponseEntity<Avatar> getAvatarById(@PathVariable Long id);
 }

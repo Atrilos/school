@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.hogwarts.shared.faculty.Faculty;
 import ru.hogwarts.shared.student.Student;
-import ru.hogwarts.student.model.Faculty;
-import ru.hogwarts.student.model.Student;
 
 import java.util.Collection;
 import java.util.List;

@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.shared.avatar.Avatar;
 import ru.hogwarts.shared.avatar.dto.AvatarDto;
-import ru.hogwarts.student.model.dto.AvatarDto;
-import ru.hogwarts.student.service.AvatarService;
 
 import java.io.IOException;
 import java.util.List;

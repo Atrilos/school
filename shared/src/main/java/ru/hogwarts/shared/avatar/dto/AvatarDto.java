@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * A DTO for the {@link ru.hogwarts.student.model.Avatar} entity
+ * A DTO for the {@link ru.hogwarts.shared.avatar.Avatar} entity
  */
 @Data
 @Builder

@@ -8,10 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.shared.faculty.dto.FacultyDto;
 import ru.hogwarts.shared.student.dto.NewStudentDto;
 import ru.hogwarts.shared.student.dto.StudentDto;
-import ru.hogwarts.student.model.dto.FacultyDto;
-import ru.hogwarts.student.model.dto.NewStudentDto;
-import ru.hogwarts.student.model.dto.StudentDto;
-import ru.hogwarts.student.service.StudentService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;

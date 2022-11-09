@@ -1,9 +1,11 @@
 server:
-  port: 8080
+  port: 8082
 
 spring:
+  application:
+    name: faculty
   datasource:
-    url: ***REMOVED***
+    url: ***REMOVED***_test
     username: student
     password: ***REMOVED***
     driver-class-name: org.postgresql.Driver
@@ -15,11 +17,8 @@ spring:
   jackson:
     serialization:
       indent-output: true
-  servlet:
-    multipart:
-      max-file-size: 10MB
-#Constants
-path:
-  to:
-    avatars:
-      folder: ./avatars
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    enabled: true

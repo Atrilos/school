@@ -50,14 +50,6 @@ public class FacultyService {
                 .toList();
     }
 
-    public Collection<StudentDto> getFacultyStudents(String facultyName) {
-        return facultyRepository
-                .findByFacultyName(facultyName)
-                .stream()
-                .map(mapper::toDto)
-                .toList();
-    }
-
     public Faculty getFacultyById(Long id) {
         return facultyRepository
                 .findById(id)

@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  zipkin:
+    base-url: http://localhost:9411
+  cloud:
+    gateway:
+      routes:
+        - id: student
+          uri: lb://STUDENT
+          predicates:
+            - Path=/student/**
+        - id: faculty
+          uri: lb://FACULTY
+          predicates:
+            - Path=/faculty/**
+        - id: avatar
+          uri: lb://AVATAR
+          predicates:
+            - Path=/avatar/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

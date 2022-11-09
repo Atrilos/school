@@ -6,5 +6,5 @@ import org.springframework.cloud.openfeign.FeignClient;
         name = "student",
         url = "${clients.student.url}"
 )
-public class StudentClient {
+public interface StudentClient {
 }

@@ -18,8 +18,6 @@ import ru.hogwarts.shared.student.dto.StudentDto;
 @RequiredArgsConstructor
 public class Mapper {
     private final ModelMapper modelMapper;
-    private final AvatarClient avatarClient;
-    private final FacultyClient facultyClient;
     @Value("${server.port}")
     private String port;
 
@@ -46,20 +44,6 @@ public class Mapper {
     }
 
     public Student toEntity(NewStudentDto studentDto) {
-        Student.StudentBuilder student = Student.builder()
-                .age(studentDto.getAge())
-                .name(studentDto.getName());
-        Avatar avatar = null;
-        if (studentDto.getAvatarId() != null && studentDto.getAvatarId() > 0) {
-            avatar = avatarClient.getAvatarById(studentDto.getAvatarId()).getBody();
-        }
-        Faculty faculty = null;
-        if (studentDto.getFacultyId() != null && studentDto.getFacultyId() > 0) {
-            faculty = facultyClient.getFaculty(studentDto.getFacultyId()).getBody();
-        }
-        return student
-                .faculty(faculty)
-                .avatar(avatar)
-                .build();
+        return modelMapper.map(studentDto, Student.class);
     }
 }
