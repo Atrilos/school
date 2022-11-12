@@ -2,6 +2,7 @@ package ru.hogwarts.school.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
 import ru.hogwarts.school.mapper.Mapper;
 import ru.hogwarts.school.model.Faculty;
@@ -52,6 +53,7 @@ public class FacultyService {
                 .toList();
     }
 
+    @Transactional
     public Collection<StudentDto> getFacultyStudents(String facultyName) {
         return facultyRepository
                 .findByFacultyName(facultyName)
