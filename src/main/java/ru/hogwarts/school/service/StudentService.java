@@ -27,26 +27,34 @@ public class StudentService {
     private final Mapper mapper;
 
     public StudentDto addStudent(NewStudentDto student) {
+        log.info("Creating student with name={}, age={}, facultyId={}, avatarId={}",
+                student.getName(), student.getAge(), student.getFacultyId(), student.getAvatarId());
         Student studentToAdd = mapper.toEntity(student);
         return mapper.toDto(studentRepository.save(studentToAdd));
     }
 
     public void removeStudent(Long id) {
+        log.info("Remove student with id={}", id);
         getStudentById(id);
         studentRepository.deleteById(id);
     }
 
     @Transactional
     public StudentDto updateStudent(long id, NewStudentDto student) {
+        log.info("Update student with id={}", id);
         Student foundStudent = getStudentById(id);
 
         Faculty faculty = null;
-        if (student.getFacultyId() != null)
+        if (student.getFacultyId() != null) {
+            log.info(", new faculty id={}", student.getFacultyId());
             faculty = facultyService.getFacultyById(student.getFacultyId());
+        }
 
         Avatar avatar = null;
-        if (student.getAvatarId() != null)
+        if (student.getAvatarId() != null) {
+            log.info(", new avatar id={}", student.getAvatarId());
             avatar = avatarService.getAvatarById(student.getAvatarId());
+        }
 
         foundStudent.setName(student.getName());
         foundStudent.setFaculty(faculty);
@@ -55,6 +63,7 @@ public class StudentService {
     }
 
     public Collection<StudentDto> getStudentsByAge(int age) {
+        log.info("Get all students with age={}", age);
         return studentRepository
                 .findStudentsByAge(age)
                 .stream()
@@ -63,7 +72,9 @@ public class StudentService {
     }
 
     public Collection<StudentDto> getStudentsByAgeBetween(int from, int to) {
+        log.info("Get all students with age between {} and {}", from, to);
         if (from > to) {
+            log.error("Min value more than max value");
             throw new IllegalArgumentException("Min value can't be more than max value");
         }
         return studentRepository
@@ -74,19 +85,25 @@ public class StudentService {
     }
 
     public FacultyDto getFacultyByStudent(Long studentId) {
+        log.info("Get the faculty of student with id={}", studentId);
         Faculty faculty = studentRepository
                 .findStudentsFaculty(studentId)
-                .orElseThrow(() -> new EntryNotFoundException("The specified student not found"));
+                .orElseThrow(() -> {
+                    log.error("Student with id={} doesn't exist!", studentId);
+                    return new EntryNotFoundException("The specified student not found");
+                });
         return mapper.toDto(faculty);
     }
 
     public StudentDto getStudent(long id) {
+        log.info("Get student with id={}", id);
         Student foundStudent = getStudentById(id);
         return mapper.toDto(foundStudent);
     }
 
     @Transactional
     public StudentDto patchStudentAvatar(long id, long avatarId) {
+        log.info("Add avatar with id={} to student with id={}", id, avatarId);
         Student student = getStudentById(id);
         Avatar avatar = avatarService.getAvatarById(avatarId);
         student.setAvatar(avatar);
@@ -96,6 +113,9 @@ public class StudentService {
     protected Student getStudentById(Long id) {
         return studentRepository
                 .findById(id)
-                .orElseThrow(() -> new EntryNotFoundException("The specified student not found"));
+                .orElseThrow(() -> {
+                    log.error("Student with id={} doesn't exist!", id);
+                    return new EntryNotFoundException("The specified student not found");
+                });
     }
 }

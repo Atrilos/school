@@ -38,6 +38,7 @@ public class AvatarService {
 
     @SuppressWarnings("all")
     public void uploadAvatar(MultipartFile multipartFile) throws IOException {
+        log.info("Upload new avatar");
         Avatar avatar = create(multipartFile);
         Path filePath = Path.of(avatarsDir, avatar.getId() + "." + getExtension(multipartFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
@@ -79,24 +80,20 @@ public class AvatarService {
         }
     }
 
-    protected Avatar getAvatarById(Long avatarId) {
-        return avatarRepository
-                .findById(avatarId)
-                .orElseThrow(() -> new EntryNotFoundException("The specified avatar not found"));
-    }
-
     private String getExtension(String filename) {
         return filename
                 .substring(filename.lastIndexOf(".") + 1);
     }
 
     public void deleteAvatarById(Long avatarId) {
+        log.info("Remove avatar with id={}", avatarId);
         getAvatarById(avatarId);
         avatarRepository
                 .removeAvatarById(avatarId);
     }
 
     public ResponseEntity<byte[]> readFromDb(Long id) {
+        log.info("Get avatar from database with id={}", id);
         Avatar avatar = getAvatarById(id);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(avatar.getMediaType()))
@@ -105,6 +102,7 @@ public class AvatarService {
     }
 
     public ResponseEntity<byte[]> readFromFs(Long id) throws IOException {
+        log.info("Get avatar from drive with id={}", id);
         Avatar avatar = getAvatarById(id);
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(avatar.getMediaType()))
@@ -113,6 +111,8 @@ public class AvatarService {
     }
 
     public List<AvatarDto> getPage(int pageNumber, int pageSize) {
+        log.info("Get avatars as page from page number {} with page size {}",
+                pageNumber, pageSize);
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return avatarRepository
                 .findAll(pageRequest)
@@ -120,5 +120,14 @@ public class AvatarService {
                 .stream()
                 .map(mapper::toDto)
                 .toList();
+    }
+
+    protected Avatar getAvatarById(Long avatarId) {
+        return avatarRepository
+                .findById(avatarId)
+                .orElseThrow(() -> {
+                    log.error("Avatar with id={} doesn't exist", avatarId);
+                    return new EntryNotFoundException("The specified avatar not found");
+                });
     }
 }
