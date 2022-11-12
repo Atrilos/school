@@ -33,16 +33,16 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
-    public StudentDto updateStudent(long id, StudentDto student) {
+    public StudentDto updateStudent(long id, NewStudentDto student) {
         Student foundStudent = getStudentById(id);
 
         Faculty faculty = null;
-        if (student.getFaculty() != null)
-            faculty = facultyService.getFacultyById(student.getFaculty().getId());
+        if (student.getFacultyId() != null)
+            faculty = facultyService.getFacultyById(student.getFacultyId());
 
         Avatar avatar = null;
-        if (student.getAvatar() != null)
-            avatar = avatarService.getAvatarById(student.getAvatar().getId());
+        if (student.getAvatarId() != null)
+            avatar = avatarService.getAvatarById(student.getAvatarId());
 
         foundStudent.setName(student.getName());
         foundStudent.setFaculty(faculty);

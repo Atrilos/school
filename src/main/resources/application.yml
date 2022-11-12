@@ -1,6 +1,7 @@
 server:
   port: 8080
-
+  error:
+    include-message: always
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/hogwarts
@@ -8,6 +9,9 @@ spring:
     password: chocolatefrog
     driver-class-name: org.postgresql.Driver
   jpa:
+    properties:
+      hibernate:
+        generate_statistics: true
     defer-datasource-initialization: false
     hibernate:
       ddl-auto: update
@@ -19,6 +23,11 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
+logging:
+  level:
+    org:
+      hibernate: INFO
+
 #Constants
 path:
   to:

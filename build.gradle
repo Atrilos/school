@@ -18,6 +18,13 @@ repositories {
     mavenCentral()
 }
 
+allprojects {
+    dependencies {
+        implementation('com.fasterxml.jackson.core:jackson-databind:2.14.0')
+        implementation('org.yaml:snakeyaml:1.33')
+    }
+}
+
 dependencies {
     implementation(platform("org.testcontainers:testcontainers-bom:1.17.5"))
     implementation("org.springdoc:springdoc-openapi-ui:1.6.12")
