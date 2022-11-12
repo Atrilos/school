@@ -16,7 +16,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     @EntityGraph(attributePaths = {"faculty", "avatar"})
     @Override
-    Optional<Student> findById(Long aLong);
+    Optional<Student> findById(Long id);
 
     @EntityGraph(attributePaths = {"faculty", "avatar"})
     @Query("SELECT s FROM Student s WHERE s.age = ?1")
@@ -31,7 +31,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             FROM Student s
             WHERE s.id = ?1
             """)
-    Faculty findStudentsFaculty(Long id);
+    Optional<Faculty> findStudentsFaculty(Long id);
 
     @Query(value = """
             SELECT count(*) FROM student

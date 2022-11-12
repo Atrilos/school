@@ -12,22 +12,25 @@ spring:
     properties:
       hibernate:
         generate_statistics: true
+        format_sql: true
     defer-datasource-initialization: false
     hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQL95Dialect
     show-sql: true
+    open-in-view: false
   jackson:
     serialization:
       indent-output: true
   servlet:
     multipart:
       max-file-size: 10MB
+  liquibase:
+    change-log: classpath:liquibase/changelog-master.yml
 logging:
   level:
     org:
       hibernate: INFO
-
 #Constants
 path:
   to:
