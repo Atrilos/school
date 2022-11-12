@@ -1,0 +1,39 @@
+server:
+  port: 9090
+  error:
+    include-message: always
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hogwarts
+    username: student
+    password: chocolatefrog
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        generate_statistics: true
+        format_sql: true
+    defer-datasource-initialization: false
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    show-sql: true
+    open-in-view: false
+  jackson:
+    serialization:
+      indent-output: true
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  liquibase:
+    change-log: classpath:liquibase/changelog-master.yml
+    rollback-file: classpath:liquibase/rollback/rollback.sql
+logging:
+  level:
+    org:
+      hibernate: INFO
+#Constants
+path:
+  to:
+    avatars:
+      folder: ./avatars
