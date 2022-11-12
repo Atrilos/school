@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1668380862985-1
+      author: atrilos
+      changes:
+        - dropSequence:
+            sequenceName: hibernate_sequence

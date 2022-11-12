@@ -1,7 +1,9 @@
 package ru.hogwarts.school.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
 import ru.hogwarts.school.mapper.Mapper;
 import ru.hogwarts.school.model.Avatar;
@@ -16,6 +18,7 @@ import java.util.Collection;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class StudentService {
 
     private final FacultyService facultyService;
@@ -33,6 +36,7 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
+    @Transactional
     public StudentDto updateStudent(long id, NewStudentDto student) {
         Student foundStudent = getStudentById(id);
 
@@ -70,7 +74,9 @@ public class StudentService {
     }
 
     public FacultyDto getFacultyByStudent(Long studentId) {
-        Faculty faculty = studentRepository.findStudentsFaculty(studentId);
+        Faculty faculty = studentRepository
+                .findStudentsFaculty(studentId)
+                .orElseThrow(() -> new EntryNotFoundException("The specified student not found"));
         return mapper.toDto(faculty);
     }
 
@@ -79,6 +85,7 @@ public class StudentService {
         return mapper.toDto(foundStudent);
     }
 
+    @Transactional
     public StudentDto patchStudentAvatar(long id, long avatarId) {
         Student student = getStudentById(id);
         Avatar avatar = avatarService.getAvatarById(avatarId);

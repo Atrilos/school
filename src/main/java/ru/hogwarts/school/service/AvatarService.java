@@ -1,6 +1,7 @@
 package ru.hogwarts.school.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
@@ -27,6 +28,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class AvatarService {
 
     private final AvatarRepository avatarRepository;

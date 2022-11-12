@@ -2,6 +2,8 @@ package ru.hogwarts.school.model;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -12,6 +14,8 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
+@DynamicUpdate
+@DynamicInsert
 @Table(name = "avatar")
 public class Avatar {
 
