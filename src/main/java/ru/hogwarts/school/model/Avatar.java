@@ -11,7 +11,6 @@ import java.util.Objects;
 @Builder
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "avatar")
 public class Avatar {

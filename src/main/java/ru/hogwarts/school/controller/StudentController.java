@@ -31,7 +31,7 @@ public class StudentController {
 
     @PutMapping("/{id}")
     public ResponseEntity<StudentDto> updateStudent(@PathVariable long id,
-                                                    @RequestBody @Valid StudentDto student) {
+                                                    @RequestBody @Valid NewStudentDto student) {
         return ResponseEntity.ok(studentService.updateStudent(id, student));
     }
 
