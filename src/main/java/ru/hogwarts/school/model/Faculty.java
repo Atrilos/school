@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class Faculty {
     @Column(name = "color")
     private String color;
     @OneToMany(mappedBy = "faculty")
-    private Set<Student> students;
+    private Set<Student> students = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
