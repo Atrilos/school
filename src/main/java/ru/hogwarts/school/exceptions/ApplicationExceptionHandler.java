@@ -17,6 +17,7 @@ import ru.hogwarts.school.exceptions.model.CustomError;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,11 +54,17 @@ public class ApplicationExceptionHandler {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return ResponseEntity
                 .status(status)
-                .body(createCustomError(ex, request, status));
+                .body(createCustomBindError(ex, request, status));
     }
 
-    private CustomError createCustomError(BindException ex,
-                                          WebRequest request, HttpStatus status) {
+    @ExceptionHandler(SQLException.class)
+    public void handleSQLException(SQLException ex,
+                                   HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    }
+
+    private CustomError createCustomBindError(BindException ex,
+                                              WebRequest request, HttpStatus status) {
         CustomError error = new CustomError();
         error.setStatus(status.value());
         error.setErrorMessage(status.getReasonPhrase());

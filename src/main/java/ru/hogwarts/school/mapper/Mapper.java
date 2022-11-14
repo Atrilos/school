@@ -2,7 +2,6 @@ package ru.hogwarts.school.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
 import ru.hogwarts.school.model.Avatar;
@@ -21,13 +20,9 @@ public class Mapper {
     private final ModelMapper modelMapper;
     private final AvatarRepository avatarRepository;
     private final FacultyRepository facultyRepository;
-    @Value("${server.port}")
-    private String port;
 
     public AvatarDto toDto(Avatar avatar) {
-        AvatarDto avatarDto = modelMapper.map(avatar, AvatarDto.class);
-        avatarDto.setUrl("http://localhost:%s/avatar/%d/from-db".formatted(port, avatar.getId()));
-        return avatarDto;
+        return modelMapper.map(avatar, AvatarDto.class);
     }
 
     public FacultyDto toDto(Faculty faculty) {

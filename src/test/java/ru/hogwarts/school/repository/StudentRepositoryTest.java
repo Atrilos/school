@@ -23,14 +23,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
 class StudentRepositoryTest {
-    @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private TestEntityManager entityManager;
-
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>(DockerImageName.parse("postgres:alpine"));
+    @Autowired
+    private StudentRepository studentRepository;
+    @Autowired
+    private TestEntityManager entityManager;
 
     @DynamicPropertySource
     static void registerProperties(DynamicPropertyRegistry registry) {

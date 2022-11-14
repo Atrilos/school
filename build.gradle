@@ -2,6 +2,7 @@ plugins {
     id 'org.springframework.boot' version '2.7.2'
     id 'io.spring.dependency-management' version '1.0.12.RELEASE'
     id 'java'
+    id 'org.liquibase.gradle' version '2.1.1'
 }
 
 group = 'ru.hogwarts'
@@ -12,10 +13,25 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+
+    liquibase {
+        activities {
+            main {
+            }
+        }
+        runList = 'main'
+    }
 }
 
 repositories {
     mavenCentral()
+}
+
+allprojects {
+    dependencies {
+        implementation('com.fasterxml.jackson.core:jackson-databind:2.14.0')
+        implementation('org.yaml:snakeyaml:1.33')
+    }
 }
 
 dependencies {
@@ -27,14 +43,24 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.modelmapper:modelmapper:3.1.0")
+    implementation("org.liquibase:liquibase-core:4.17.2")
     runtimeOnly("org.postgresql:postgresql")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
+    testImplementation("com.github.javafaker:javafaker:1.0.2")
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
+
+    liquibaseRuntime("org.liquibase:liquibase-core:4.17.2")
+    liquibaseRuntime("info.picocli:picocli:4.7.0")
+    liquibaseRuntime("org.liquibase:liquibase-groovy-dsl:3.0.2")
+    liquibaseRuntime("org.liquibase.ext:liquibase-hibernate5:4.17.2")
+    liquibaseRuntime(sourceSets.getByName("main").compileClasspath)
+    liquibaseRuntime(sourceSets.getByName("main").runtimeClasspath)
+    liquibaseRuntime(sourceSets.getByName("main").output)
 }
 
 test {

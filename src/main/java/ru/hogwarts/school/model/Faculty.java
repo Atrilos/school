@@ -4,15 +4,15 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "faculty")
 public class Faculty {
@@ -25,8 +25,7 @@ public class Faculty {
     @Column(name = "color")
     private String color;
     @OneToMany(mappedBy = "faculty")
-    @ToString.Exclude
-    private List<Student> students;
+    private Set<Student> students = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
