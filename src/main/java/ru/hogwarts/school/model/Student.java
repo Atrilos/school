@@ -11,7 +11,6 @@ import java.util.Objects;
 @Builder
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "student")
 public class Student {
@@ -23,16 +22,14 @@ public class Student {
     private String name;
     @Column(name = "age")
     private int age;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "faculty_id")
-    @ToString.Exclude
-    private Faculty faculty;
-    @OneToOne(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.MERGE, CascadeType.PERSIST}
     )
-    @JoinColumn(name = "avatar_id")
-    @ToString.Exclude
+    @JoinColumn(name = "faculty_id")
+    private Faculty faculty;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "avatar_id", unique = true)
     private Avatar avatar;
 
     @Override
