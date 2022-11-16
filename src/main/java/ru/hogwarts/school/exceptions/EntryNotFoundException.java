@@ -1,11 +1,15 @@
 package ru.hogwarts.school.exceptions;
 
 public class EntryNotFoundException extends RuntimeException {
-    public EntryNotFoundException() {
-        super();
+
+    private final String logMessage;
+
+    public EntryNotFoundException(String logMessage, String message) {
+        super(message);
+        this.logMessage = logMessage;
     }
 
-    public EntryNotFoundException(String message) {
-        super(message);
+    public String getLogMessage() {
+        return logMessage;
     }
 }
