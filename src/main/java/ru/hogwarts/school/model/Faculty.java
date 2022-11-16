@@ -1,6 +1,7 @@
 package ru.hogwarts.school.model;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -14,6 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@Slf4j
 @Table(name = "faculty")
 public class Faculty {
     @Id
@@ -40,5 +42,20 @@ public class Faculty {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @PostRemove
+    public void logFacultyRemoval() {
+        log.info("Faculty with id={} removed", id);
+    }
+
+    @PostPersist
+    public void logFacultyAdded() {
+        log.info("Add new faculty with name={}, color={}", name, color);
+    }
+
+    @PostUpdate
+    public void logFacultyUpdated() {
+        log.info("Faculty with id={} updated", id);
     }
 }

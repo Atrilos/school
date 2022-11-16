@@ -1,6 +1,7 @@
 package ru.hogwarts.school.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
@@ -13,6 +14,7 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import java.util.Collection;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class FacultyService {
 
@@ -38,6 +40,7 @@ public class FacultyService {
     }
 
     public Collection<FacultyDto> getFacultiesByColor(String color) {
+        log.info("Get all faculties with color={}", color);
         return facultyRepository.
                 findFacultiesByColor(color)
                 .stream()
@@ -46,6 +49,7 @@ public class FacultyService {
     }
 
     public Collection<FacultyDto> getFacultiesByName(String name) {
+        log.info("Get all faculties with name={}", name);
         return facultyRepository
                 .findFacultiesByName(name)
                 .stream()
@@ -55,6 +59,7 @@ public class FacultyService {
 
     @Transactional
     public Collection<StudentDto> getFacultyStudents(String facultyName) {
+        log.info("Get all students from facultyName={}", facultyName);
         return facultyRepository
                 .findByFacultyName(facultyName)
                 .stream()
@@ -63,12 +68,14 @@ public class FacultyService {
     }
 
     public FacultyDto getFaculty(Long id) {
+        log.info("Get faculty with id={}", id);
         return mapper.toDto(getFacultyById(id));
     }
 
     protected Faculty getFacultyById(Long id) {
         return facultyRepository
                 .findById(id)
-                .orElseThrow(() -> new EntryNotFoundException("The specified faculty not found"));
+                .orElseThrow(() -> new EntryNotFoundException("Faculty with id=" + id + " doesn't exist",
+                        "The specified faculty not found"));
     }
 }

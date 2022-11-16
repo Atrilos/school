@@ -49,13 +49,19 @@ public class Mapper {
         if (studentDto.getAvatarId() != null && studentDto.getAvatarId() > 0) {
             avatar = avatarRepository
                     .findById(studentDto.getAvatarId())
-                    .orElseThrow(() -> new EntryNotFoundException("The specified avatar not found"));
+                    .orElseThrow(
+                            () -> new EntryNotFoundException("Avatar with id=" + studentDto.getAvatarId() + " doesn't exist",
+                                    "The specified avatar not found")
+                    );
         }
         Faculty faculty = null;
         if (studentDto.getFacultyId() != null && studentDto.getFacultyId() > 0) {
             faculty = facultyRepository
                     .findById(studentDto.getFacultyId())
-                    .orElseThrow(() -> new EntryNotFoundException("The specified faculty not found"));
+                    .orElseThrow(
+                            () -> new EntryNotFoundException("Faculty with id=" + studentDto.getFacultyId() + " doesn't exist",
+                                    "The specified faculty not found")
+                    );
         }
         return student
                 .faculty(faculty)

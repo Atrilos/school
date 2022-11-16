@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 public interface FacultyRepository extends JpaRepository<Faculty, Long> {
-    @Query("SELECT f FROM Faculty f WHERE f.color = ?1")
+    @Query("SELECT f FROM Faculty f WHERE LOWER(f.color) LIKE LOWER(?1)")
     List<Faculty> findFacultiesByColor(String color);
 
     @Query(value = "SELECT f FROM Faculty f WHERE LOWER(f.name) LIKE LOWER(?1)")
@@ -19,7 +19,7 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
 
     @Query(value = """
             SELECT f.students FROM Faculty f
-            WHERE f.name = ?1
+            WHERE LOWER(f.name) LIKE LOWER(?1)
             """
     )
     Collection<Student> findByFacultyName(String facultyName);

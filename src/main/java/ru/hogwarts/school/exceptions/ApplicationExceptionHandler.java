@@ -1,6 +1,7 @@
 package ru.hogwarts.school.exceptions;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -22,11 +23,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class ApplicationExceptionHandler {
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public void handleEmptyResultDataAccessException(EmptyResultDataAccessException ex,
                                                      HttpServletResponse response) throws IOException {
+        log.error("{}: {}", ex.getClass().getName(), ex.getMessage());
         response.sendError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
@@ -39,18 +42,21 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public void handleConstraintViolationException(ConstraintViolationException ex,
                                                    HttpServletResponse response) throws IOException {
+        log.error("{}: {}", ex.getClass().getName(), ex.getMessage());
         response.sendError(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
 
     @ExceptionHandler(EntryNotFoundException.class)
     public void handleEntryNotFoundException(EntryNotFoundException ex,
                                              HttpServletResponse response) throws IOException {
+        log.error("{}: {}", ex.getClass().getName(), ex.getLogMessage());
         response.sendError(HttpStatus.NOT_FOUND.value(), ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CustomError> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex,
                                                                              WebRequest request) {
+        log.error("{}: {}", ex.getClass().getName(), ex.getMessage());
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return ResponseEntity
                 .status(status)
@@ -60,6 +66,7 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(SQLException.class)
     public void handleSQLException(SQLException ex,
                                    HttpServletResponse response) throws IOException {
+        log.error("{}: {}", ex.getClass().getName(), ex.getMessage());
         response.sendError(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
 
