@@ -38,7 +38,7 @@ public class AvatarService {
 
     @SuppressWarnings("all")
     public void uploadAvatar(MultipartFile multipartFile) throws IOException {
-        log.info("Upload new avatar");
+        log.info("Uploading new avatar");
         Avatar avatar = create(multipartFile);
         Path filePath = Path.of(avatarsDir, avatar.getId() + "." + getExtension(multipartFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
@@ -86,7 +86,6 @@ public class AvatarService {
     }
 
     public void deleteAvatarById(Long avatarId) {
-        log.info("Remove avatar with id={}", avatarId);
         getAvatarById(avatarId);
         avatarRepository
                 .removeAvatarById(avatarId);
@@ -125,9 +124,7 @@ public class AvatarService {
     protected Avatar getAvatarById(Long avatarId) {
         return avatarRepository
                 .findById(avatarId)
-                .orElseThrow(() -> {
-                    log.error("Avatar with id={} doesn't exist", avatarId);
-                    return new EntryNotFoundException("The specified avatar not found");
-                });
+                .orElseThrow(() -> new EntryNotFoundException("Avatar with id=" + avatarId + " doesn't exist",
+                        "The specified avatar not found"));
     }
 }

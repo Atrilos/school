@@ -27,7 +27,6 @@ spring:
       max-file-size: 10MB
   liquibase:
     change-log: classpath:liquibase/changelog-master.yml
-    rollback-file: classpath:liquibase/rollback/rollback.sql
 logging:
   level:
     org:
