@@ -99,7 +99,7 @@ public class StudentService {
 
     @Transactional
     public StudentDto patchStudentAvatar(long id, long avatarId) {
-        log.info("Add avatar with id={} to student with id={}", id, avatarId);
+        log.info("Add avatar with id={} to student with id={}", avatarId, id);
         Student student = getStudentById(id);
         Avatar avatar = avatarService.getAvatarById(avatarId);
         student.setAvatar(avatar);
