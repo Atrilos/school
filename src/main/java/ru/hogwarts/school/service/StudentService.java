@@ -26,6 +26,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final Mapper mapper;
 
+    @Transactional
     public StudentDto addStudent(NewStudentDto student) {
         Student studentToAdd = mapper.toEntity(student);
         return mapper.toDto(studentRepository.save(studentToAdd));
@@ -38,15 +39,20 @@ public class StudentService {
 
     @Transactional
     public StudentDto updateStudent(long id, NewStudentDto student) {
+        log.info("Update student with id={}", id);
         Student foundStudent = getStudentById(id);
 
         Faculty faculty = null;
-        if (student.getFacultyId() != null)
+        if (student.getFacultyId() != null) {
+            log.info(", new faculty id={}", student.getFacultyId());
             faculty = facultyService.getFacultyById(student.getFacultyId());
+        }
 
         Avatar avatar = null;
-        if (student.getAvatarId() != null)
+        if (student.getAvatarId() != null) {
+            log.info(", new avatar id={}", student.getAvatarId());
             avatar = avatarService.getAvatarById(student.getAvatarId());
+        }
 
         foundStudent.setName(student.getName());
         foundStudent.setFaculty(faculty);
@@ -55,6 +61,7 @@ public class StudentService {
     }
 
     public Collection<StudentDto> getStudentsByAge(int age) {
+        log.info("Get all students with age={}", age);
         return studentRepository
                 .findStudentsByAge(age)
                 .stream()
@@ -63,7 +70,9 @@ public class StudentService {
     }
 
     public Collection<StudentDto> getStudentsByAgeBetween(int from, int to) {
+        log.info("Get all students with age between {} and {}", from, to);
         if (from > to) {
+            log.error("Min value more than max value");
             throw new IllegalArgumentException("Min value can't be more than max value");
         }
         return studentRepository
@@ -74,19 +83,23 @@ public class StudentService {
     }
 
     public FacultyDto getFacultyByStudent(Long studentId) {
+        log.info("Get the faculty of student with id={}", studentId);
         Faculty faculty = studentRepository
                 .findStudentsFaculty(studentId)
-                .orElseThrow(() -> new EntryNotFoundException("The specified student not found"));
+                .orElseThrow(() -> new EntryNotFoundException("Student with id=" + studentId + " doesn't exist!",
+                        "The specified student not found"));
         return mapper.toDto(faculty);
     }
 
     public StudentDto getStudent(long id) {
+        log.info("Get student with id={}", id);
         Student foundStudent = getStudentById(id);
         return mapper.toDto(foundStudent);
     }
 
     @Transactional
     public StudentDto patchStudentAvatar(long id, long avatarId) {
+        log.info("Add avatar with id={} to student with id={}", avatarId, id);
         Student student = getStudentById(id);
         Avatar avatar = avatarService.getAvatarById(avatarId);
         student.setAvatar(avatar);
@@ -96,6 +109,7 @@ public class StudentService {
     protected Student getStudentById(Long id) {
         return studentRepository
                 .findById(id)
-                .orElseThrow(() -> new EntryNotFoundException("The specified student not found"));
+                .orElseThrow(() -> new EntryNotFoundException("Student with id=" + id + " doesn't exist!",
+                        "The specified student not found"));
     }
 }
