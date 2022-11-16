@@ -22,21 +22,17 @@ public class FacultyService {
     private final Mapper mapper;
 
     public FacultyDto addFaculty(FacultyDto faculty) {
-        log.info("Add new faculty with name={}, color={}",
-                faculty.getName(), faculty.getColor());
         faculty.setId(null);
         Faculty facultyToAdd = mapper.toEntity(faculty);
         return mapper.toDto(facultyRepository.save(facultyToAdd));
     }
 
     public void removeFaculty(Long id) {
-        log.info("Delete faculty with id={}", id);
         getFacultyById(id);
         facultyRepository.deleteById(id);
     }
 
     public FacultyDto updateFaculty(long id, FacultyDto faculty) {
-        log.info("Update faculty with id={}", id);
         Faculty foundFaculty = getFacultyById(id);
         foundFaculty.setName(faculty.getName());
         foundFaculty.setColor(faculty.getColor());
@@ -79,9 +75,7 @@ public class FacultyService {
     protected Faculty getFacultyById(Long id) {
         return facultyRepository
                 .findById(id)
-                .orElseThrow(() -> {
-                    log.error("Faculty with id={} doesn't exist", id);
-                    return new EntryNotFoundException("The specified faculty not found");
-                });
+                .orElseThrow(() -> new EntryNotFoundException("Faculty with id=" + id + " doesn't exist",
+                        "The specified faculty not found"));
     }
 }

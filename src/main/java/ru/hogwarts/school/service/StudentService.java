@@ -26,15 +26,13 @@ public class StudentService {
     private final StudentRepository studentRepository;
     private final Mapper mapper;
 
+    @Transactional
     public StudentDto addStudent(NewStudentDto student) {
-        log.info("Creating student with name={}, age={}, facultyId={}, avatarId={}",
-                student.getName(), student.getAge(), student.getFacultyId(), student.getAvatarId());
         Student studentToAdd = mapper.toEntity(student);
         return mapper.toDto(studentRepository.save(studentToAdd));
     }
 
     public void removeStudent(Long id) {
-        log.info("Remove student with id={}", id);
         getStudentById(id);
         studentRepository.deleteById(id);
     }
@@ -88,10 +86,8 @@ public class StudentService {
         log.info("Get the faculty of student with id={}", studentId);
         Faculty faculty = studentRepository
                 .findStudentsFaculty(studentId)
-                .orElseThrow(() -> {
-                    log.error("Student with id={} doesn't exist!", studentId);
-                    return new EntryNotFoundException("The specified student not found");
-                });
+                .orElseThrow(() -> new EntryNotFoundException("Student with id=" + studentId + " doesn't exist!",
+                        "The specified student not found"));
         return mapper.toDto(faculty);
     }
 
@@ -113,9 +109,7 @@ public class StudentService {
     protected Student getStudentById(Long id) {
         return studentRepository
                 .findById(id)
-                .orElseThrow(() -> {
-                    log.error("Student with id={} doesn't exist!", id);
-                    return new EntryNotFoundException("The specified student not found");
-                });
+                .orElseThrow(() -> new EntryNotFoundException("Student with id=" + id + " doesn't exist!",
+                        "The specified student not found"));
     }
 }
