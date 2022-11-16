@@ -1,6 +1,7 @@
 package ru.hogwarts.school.model;
 
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -16,6 +17,7 @@ import java.util.Objects;
 @Entity
 @DynamicUpdate
 @DynamicInsert
+@Slf4j
 @Table(name = "avatar")
 public class Avatar {
 
@@ -45,5 +47,10 @@ public class Avatar {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    @PostRemove
+    public void logAvatarRemoval() {
+        log.info("Avatar with id={} removed", id);
     }
 }
