@@ -57,4 +57,9 @@ public class FacultyController {
     public ResponseEntity<Collection<StudentDto>> getFacultyStudents(@RequestParam @NotBlank String facultyName) {
         return ResponseEntity.ok(facultyService.getFacultyStudents(facultyName));
     }
+
+    @GetMapping("/parallel/longest-name")
+    public ResponseEntity<String> getLongestName() {
+        return ResponseEntity.ok(facultyService.getLongestName());
+    }
 }
