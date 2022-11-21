@@ -2,6 +2,8 @@ package ru.hogwarts.school.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
@@ -15,6 +17,10 @@ import ru.hogwarts.school.model.dto.StudentDto;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +31,12 @@ public class StudentService {
     private final AvatarService avatarService;
     private final StudentRepository studentRepository;
     private final Mapper mapper;
+    @Qualifier("threadA")
+    private final ExecutorService threadA;
+    @Qualifier("threadB")
+    private final ExecutorService threadB;
+
+    private final ReentrantLock lock = new ReentrantLock();
 
     @Transactional
     public StudentDto addStudent(NewStudentDto student) {
@@ -134,4 +146,65 @@ public class StudentService {
                 .orElseThrow(() -> new EntryNotFoundException("No students found or student's age undefined",
                         "No students found or student's age undefined"));
     }
+
+    public void getInDifferentThreads() {
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, 6)).getContent();
+        log.info(
+                "Initial order: {}",
+                students.stream().map(Student::getName).collect(Collectors.joining(", ")));
+
+        for (int i = 0; i < students.size(); i++) {
+            int index = i;
+            if (i == 0 || i == 1) {
+                log.info(students.get(i).getName());
+            } else if (i == 2 || i == 3) {
+                threadA.submit(() -> printName(students, index));
+            } else {
+                threadB.submit(() -> printName(students, index));
+            }
+        }
+    }
+
+    public void getInDifferentThreadsSynced() {
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, 6)).getContent();
+        log.info(
+                "Initial order: {}",
+                students.stream().map(Student::getName).collect(Collectors.joining(", ")));
+
+        for (int i = 0; i < students.size(); i++) {
+            int index = i;
+            if (i == 0 || i == 1) {
+                log.info(students.get(i).getName());
+            } else if (i == 2 || i == 3) {
+                threadA.submit(() -> {
+                    lock.lock();
+                    try {
+                        printName(students, index);
+                    } finally {
+                        lock.unlock();
+                    }
+                });
+            } else {
+                threadB.submit(() -> {
+                    lock.lock();
+                    try {
+                        printName(students, index);
+                    } finally {
+                        lock.unlock();
+                    }
+                });
+            }
+        }
+    }
+
+    private void printName(List<Student> students, int index) {
+        try {
+            // Add delay to simulate inconsistency in output
+            Thread.sleep(1000);
+            log.info(students.get(index).getName());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
