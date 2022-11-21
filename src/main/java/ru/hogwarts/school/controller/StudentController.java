@@ -77,4 +77,16 @@ public class StudentController {
     public ResponseEntity<Double> getAverageAge() {
         return ResponseEntity.ok(studentService.getAverageAge());
     }
+
+    @GetMapping("/parallel/get-6")
+    public ResponseEntity<Void> getInDifferentThreads() {
+        studentService.getInDifferentThreads();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/parallel/get-6-synced")
+    public ResponseEntity<Void> getInDifferentThreadsSynced() {
+        studentService.getInDifferentThreadsSynced();
+        return ResponseEntity.ok().build();
+    }
 }
