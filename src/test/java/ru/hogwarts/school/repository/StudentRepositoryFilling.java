@@ -14,9 +14,9 @@ import java.util.List;
 @ActiveProfiles("test")
 class StudentRepositoryFilling {
 
+    private final Faker faker = new Faker();
     @Autowired
     private StudentRepository studentRepository;
-    private final Faker faker = new Faker();
 
     @Test
     public void dbFiller() {

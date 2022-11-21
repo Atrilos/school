@@ -78,4 +78,9 @@ public class FacultyService {
                 .orElseThrow(() -> new EntryNotFoundException("Faculty with id=" + id + " doesn't exist",
                         "The specified faculty not found"));
     }
+
+    public String getLongestName() {
+        log.info("Get the longest faculty name");
+        return facultyRepository.findLongestName();
+    }
 }
