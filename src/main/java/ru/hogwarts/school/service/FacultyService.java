@@ -81,6 +81,9 @@ public class FacultyService {
 
     public String getLongestName() {
         log.info("Get the longest faculty name");
-        return facultyRepository.findLongestName();
+        return facultyRepository
+                .findLongestName()
+                .orElseThrow(() -> new EntryNotFoundException("No faculties present in the Faculty table or names undefined",
+                        "No faculties present in the Faculty table or names undefined"));
     }
 }

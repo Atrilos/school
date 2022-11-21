@@ -8,6 +8,7 @@ import ru.hogwarts.school.model.Student;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FacultyRepository extends JpaRepository<Faculty, Long> {
@@ -29,5 +30,5 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
             ORDER BY LENGTH(f.name) DESC
             LIMIT 1
             """, nativeQuery = true)
-    String findLongestName();
+    Optional<String> findLongestName();
 }
