@@ -23,4 +23,11 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
             """
     )
     Collection<Student> findByFacultyName(String facultyName);
+
+    @Query(value = """
+            SELECT f.name FROM faculty f
+            ORDER BY LENGTH(f.name) DESC
+            LIMIT 1
+            """, nativeQuery = true)
+    String findLongestName();
 }
