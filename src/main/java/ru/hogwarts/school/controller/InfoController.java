@@ -15,4 +15,14 @@ public class InfoController {
     public ResponseEntity<String> getPort() {
         return ResponseEntity.ok(port);
     }
+
+    /**
+     * Параллельное выполнение не ускоряет выполнение метода, а наоборот замедляет, из-за оптимизаций компилятора,
+     * а также долгого времени создания потоков в ForkJoin (во всяком случае в Windows).
+     * Лучшее решение для ускорения будет использование формулы Гаусса, но опять же выполнение будет последовательным.
+     */
+    @GetMapping("/parallel")
+    public Long getSum() {
+        return (long) 1_000_000 * 1_000_001 / 2;
+    }
 }

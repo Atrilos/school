@@ -112,4 +112,26 @@ public class StudentService {
                 .orElseThrow(() -> new EntryNotFoundException("Student with id=" + id + " doesn't exist!",
                         "The specified student not found"));
     }
+
+    public Collection<String> getAllStudentNamesStarting(String letter) {
+        log.info("Get the names of all uppercase students starting with the letter {}, sorted lexicographically",
+                letter.toUpperCase());
+        return studentRepository.findAll().stream()
+                .parallel()
+                .map(Student::getName)
+                .filter(c -> c.matches("(?i)" + letter + ".*"))
+                .map(String::toUpperCase)
+                .sorted()
+                .toList();
+    }
+
+    public Double getAverageAge() {
+        log.info("Get student's average age");
+        return studentRepository.findAll().stream()
+                .parallel()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElseThrow(() -> new EntryNotFoundException("No students found or student's age undefined",
+                        "No students found or student's age undefined"));
+    }
 }

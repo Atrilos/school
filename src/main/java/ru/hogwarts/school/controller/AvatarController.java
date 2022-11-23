@@ -19,7 +19,7 @@ public class AvatarController {
     private final AvatarService avatarService;
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> uploadAvatar(@RequestParam MultipartFile avatar) throws IOException {
+    public ResponseEntity<Void> uploadAvatar(@RequestParam MultipartFile avatar) throws IOException {
         avatarService.uploadAvatar(avatar);
         return ResponseEntity.ok().build();
     }
