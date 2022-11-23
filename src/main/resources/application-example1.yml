@@ -4,9 +4,9 @@ server:
     include-message: always
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/hogwarts
+    url: ***REMOVED***
     username: student
-    password: chocolatefrog
+    password: ***REMOVED***
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:
