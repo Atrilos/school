@@ -4,9 +4,9 @@ server:
     include-message: always
 spring:
   datasource:
-    url: ***REMOVED***
-    username: student
-    password: ***REMOVED***
+    url: ${HOGWARTS_URL}
+    username: ${HOGWARTS_USERNAME}
+    password: ${HOGWARTS_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:
