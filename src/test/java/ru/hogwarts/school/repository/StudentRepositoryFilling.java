@@ -1,6 +1,7 @@
 package ru.hogwarts.school.repository;
 
 import com.github.javafaker.Faker;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ class StudentRepositoryFilling {
     private StudentRepository studentRepository;
 
     @Test
+    @Ignore
     public void dbFiller() {
         List<Student> students = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
