@@ -149,6 +149,7 @@ public class StudentService {
     }
 
     public void getInDifferentThreads(int size) {
+        log.info("Requesting {} different students' names unsynced", size);
         List<Student> students = studentRepository.findAll(PageRequest.of(0, size)).getContent();
         log.info(
                 "Initial order: {}",
@@ -167,6 +168,7 @@ public class StudentService {
     }
 
     public void getInDifferentThreadsSynced(int size) {
+        log.info("Requesting {} different students' names synced", size);
         List<Student> students = studentRepository.findAll(PageRequest.of(0, size)).getContent();
         log.info(
                 "Initial order: {}",
@@ -210,12 +212,13 @@ public class StudentService {
                 });
             }
         }
+
         return result;
     }
 
     private void printName(Student student) {
         try {
-            // Add delay to simulate inconsistency in output
+            // Add delay to simulate inconsistency in the output
             Thread.sleep(1000);
             log.info(student.getName());
         } catch (InterruptedException e) {

@@ -81,16 +81,16 @@ public class StudentController {
 
     @GetMapping("/parallel/get-unsynced")
     public ResponseEntity<Void> getInDifferentThreads(@RequestParam(value = "size", defaultValue = "6")
-                                                          @Min(value = 1, message = "Minimum requested size is 1")
-                                                          int size) {
+                                                      @Min(value = 1, message = "Minimum requested size is 1")
+                                                      int size) {
         studentService.getInDifferentThreads(size);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/parallel/get-synced")
     public ResponseEntity<Void> getInDifferentThreadsSynced(@RequestParam(value = "size", defaultValue = "6")
-                                                                @Min(value = 1, message = "Minimum requested size is 1")
-                                                                int size) {
+                                                            @Min(value = 1, message = "Minimum requested size is 1")
+                                                            int size) {
         studentService.getInDifferentThreadsSynced(size);
         return ResponseEntity.ok().build();
     }
