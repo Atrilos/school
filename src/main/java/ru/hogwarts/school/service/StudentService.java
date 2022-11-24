@@ -2,6 +2,8 @@ package ru.hogwarts.school.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
@@ -14,7 +16,12 @@ import ru.hogwarts.school.model.dto.NewStudentDto;
 import ru.hogwarts.school.model.dto.StudentDto;
 import ru.hogwarts.school.repository.StudentRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +32,12 @@ public class StudentService {
     private final AvatarService avatarService;
     private final StudentRepository studentRepository;
     private final Mapper mapper;
+    @Qualifier("threadA")
+    private final ExecutorService threadA;
+    @Qualifier("threadB")
+    private final ExecutorService threadB;
+
+    private final ReentrantLock lock = new ReentrantLock(true);
 
     @Transactional
     public StudentDto addStudent(NewStudentDto student) {
@@ -134,4 +147,83 @@ public class StudentService {
                 .orElseThrow(() -> new EntryNotFoundException("No students found or student's age undefined",
                         "No students found or student's age undefined"));
     }
+
+    public void getInDifferentThreads(int size) {
+        log.info("Requesting {} different students' names unsynced", size);
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, size)).getContent();
+        log.info(
+                "Initial order: {}",
+                students.stream().map(Student::getName).collect(Collectors.joining(", ")));
+
+        for (int i = 0; i < students.size(); i++) {
+            int index = i;
+            if (i % 6 == 0 || i % 6 == 1) {
+                printName(students.get(index));
+            } else if (i % 6 == 2 || i % 6 == 3) {
+                threadA.execute(() -> printName(students.get(index)));
+            } else {
+                threadB.execute(() -> printName(students.get(index)));
+            }
+        }
+    }
+
+    public void getInDifferentThreadsSynced(int size) {
+        log.info("Requesting {} different students' names synced", size);
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, size)).getContent();
+        log.info(
+                "Initial order: {}",
+                students.stream().map(Student::getName).collect(Collectors.joining(", ")));
+
+        List<Runnable> tasks = getStructuredRunnableFromStudents(students);
+        for (int i = 0; i < tasks.size(); i++) {
+            if (i % 3 == 0) {
+                tasks.get(i).run();
+            } else if (i % 3 == 1) {
+                threadA.execute(tasks.get(i));
+            } else {
+                threadB.execute(tasks.get(i));
+            }
+        }
+    }
+
+    private List<Runnable> getStructuredRunnableFromStudents(List<Student> students) {
+        List<Runnable> result = new ArrayList<>();
+
+        for (int i = 0, size = students.size(); i < size; i = i + 2) {
+            int index = i;
+            if (i + 1 < size) {
+                result.add(() -> {
+                    lock.lock();
+                    try {
+                        printName(students.get(index));
+                        printName(students.get(index + 1));
+                    } finally {
+                        lock.unlock();
+                    }
+                });
+            } else {
+                result.add(() -> {
+                    lock.lock();
+                    try {
+                        printName(students.get(index));
+                    } finally {
+                        lock.unlock();
+                    }
+                });
+            }
+        }
+
+        return result;
+    }
+
+    private void printName(Student student) {
+        try {
+            // Add delay to simulate inconsistency in the output
+            Thread.sleep(1000);
+            log.info(student.getName());
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

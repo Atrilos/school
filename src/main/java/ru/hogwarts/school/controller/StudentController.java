@@ -11,6 +11,7 @@ import ru.hogwarts.school.model.dto.StudentDto;
 import ru.hogwarts.school.service.StudentService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import java.util.Collection;
 
@@ -76,5 +77,21 @@ public class StudentController {
     @GetMapping(value = "/parallel/avg-age")
     public ResponseEntity<Double> getAverageAge() {
         return ResponseEntity.ok(studentService.getAverageAge());
+    }
+
+    @GetMapping("/parallel/get-unsynced")
+    public ResponseEntity<Void> getInDifferentThreads(@RequestParam(value = "size", defaultValue = "6")
+                                                      @Min(value = 1, message = "Minimum requested size is 1")
+                                                      int size) {
+        studentService.getInDifferentThreads(size);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/parallel/get-synced")
+    public ResponseEntity<Void> getInDifferentThreadsSynced(@RequestParam(value = "size", defaultValue = "6")
+                                                            @Min(value = 1, message = "Minimum requested size is 1")
+                                                            int size) {
+        studentService.getInDifferentThreadsSynced(size);
+        return ResponseEntity.ok().build();
     }
 }
