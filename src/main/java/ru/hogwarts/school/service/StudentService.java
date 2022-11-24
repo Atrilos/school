@@ -16,6 +16,7 @@ import ru.hogwarts.school.model.dto.NewStudentDto;
 import ru.hogwarts.school.model.dto.StudentDto;
 import ru.hogwarts.school.repository.StudentRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -158,9 +159,9 @@ public class StudentService {
             if (i == 0 || i == 1) {
                 log.info(students.get(i).getName());
             } else if (i == 2 || i == 3) {
-                threadA.submit(() -> printName(students, index));
+                threadA.execute(() -> printName(students.get(index)));
             } else {
-                threadB.submit(() -> printName(students, index));
+                threadB.execute(() -> printName(students.get(index)));
             }
         }
     }
@@ -171,37 +172,52 @@ public class StudentService {
                 "Initial order: {}",
                 students.stream().map(Student::getName).collect(Collectors.joining(", ")));
 
-        for (int i = 0; i < students.size(); i++) {
+        List<Runnable> tasks = getStructuredRunnableFromStudents(students);
+        for (int i = 0; i < tasks.size(); i++) {
+            if (i == 0) {
+                tasks.get(i).run();
+            } else if (i == 1) {
+                threadA.execute(tasks.get(i));
+            } else {
+                threadB.execute(tasks.get(i));
+            }
+        }
+    }
+
+    private List<Runnable> getStructuredRunnableFromStudents(List<Student> students) {
+        List<Runnable> result = new ArrayList<>();
+
+        for (int i = 0, size = students.size(); i < size; i = i + 2) {
             int index = i;
-            if (i == 0 || i == 1) {
-                log.info(students.get(i).getName());
-            } else if (i == 2 || i == 3) {
-                threadA.submit(() -> {
+            if (i + 1 < size) {
+                result.add(() -> {
                     lock.lock();
                     try {
-                        printName(students, index);
+                        printName(students.get(index));
+                        printName(students.get(index + 1));
                     } finally {
                         lock.unlock();
                     }
                 });
             } else {
-                threadB.submit(() -> {
+                result.add(() -> {
                     lock.lock();
                     try {
-                        printName(students, index);
+                        printName(students.get(index));
                     } finally {
                         lock.unlock();
                     }
                 });
             }
         }
+        return result;
     }
 
-    private void printName(List<Student> students, int index) {
+    private void printName(Student student) {
         try {
             // Add delay to simulate inconsistency in output
             Thread.sleep(1000);
-            log.info(students.get(index).getName());
+            log.info(student.getName());
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
