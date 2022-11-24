@@ -37,7 +37,7 @@ public class StudentService {
     @Qualifier("threadB")
     private final ExecutorService threadB;
 
-    private final ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock(true);
 
     @Transactional
     public StudentDto addStudent(NewStudentDto student) {
@@ -148,17 +148,17 @@ public class StudentService {
                         "No students found or student's age undefined"));
     }
 
-    public void getInDifferentThreads() {
-        List<Student> students = studentRepository.findAll(PageRequest.of(0, 6)).getContent();
+    public void getInDifferentThreads(int size) {
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, size)).getContent();
         log.info(
                 "Initial order: {}",
                 students.stream().map(Student::getName).collect(Collectors.joining(", ")));
 
         for (int i = 0; i < students.size(); i++) {
             int index = i;
-            if (i == 0 || i == 1) {
-                log.info(students.get(i).getName());
-            } else if (i == 2 || i == 3) {
+            if (i % 6 == 0 || i % 6 == 1) {
+                printName(students.get(index));
+            } else if (i % 6 == 2 || i % 6 == 3) {
                 threadA.execute(() -> printName(students.get(index)));
             } else {
                 threadB.execute(() -> printName(students.get(index)));
@@ -166,17 +166,17 @@ public class StudentService {
         }
     }
 
-    public void getInDifferentThreadsSynced() {
-        List<Student> students = studentRepository.findAll(PageRequest.of(0, 6)).getContent();
+    public void getInDifferentThreadsSynced(int size) {
+        List<Student> students = studentRepository.findAll(PageRequest.of(0, size)).getContent();
         log.info(
                 "Initial order: {}",
                 students.stream().map(Student::getName).collect(Collectors.joining(", ")));
 
         List<Runnable> tasks = getStructuredRunnableFromStudents(students);
         for (int i = 0; i < tasks.size(); i++) {
-            if (i == 0) {
+            if (i % 3 == 0) {
                 tasks.get(i).run();
-            } else if (i == 1) {
+            } else if (i % 3 == 1) {
                 threadA.execute(tasks.get(i));
             } else {
                 threadB.execute(tasks.get(i));
