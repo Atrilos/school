@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
 import ru.hogwarts.school.mapper.Mapper;
 import ru.hogwarts.school.model.Avatar;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.model.dto.AvatarDto;
 import ru.hogwarts.school.repository.AvatarRepository;
 
@@ -32,14 +33,15 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 public class AvatarService {
 
     private final AvatarRepository avatarRepository;
+    private final StudentService studentService;
     private final Mapper mapper;
     @Value("${path.to.avatars.folder}")
     private String avatarsDir;
 
     @SuppressWarnings("all")
-    public void uploadAvatar(MultipartFile multipartFile) throws IOException {
+    public void uploadAvatar(Long id, MultipartFile multipartFile) throws IOException {
         log.info("Uploading new avatar");
-        Avatar avatar = create(multipartFile);
+        Avatar avatar = create(id, multipartFile);
         Path filePath = Path.of(avatarsDir, avatar.getId() + "." + getExtension(multipartFile.getOriginalFilename()));
         Files.createDirectories(filePath.getParent());
         Files.deleteIfExists(filePath);
@@ -51,14 +53,16 @@ public class AvatarService {
         }
         avatar.setData(generateImagePreview(filePath));
         avatar.setFilePath(filePath.toString());
+        avatarRepository.save(avatar);
     }
 
-    private Avatar create(MultipartFile multipartFile) {
-        Avatar avatar = Avatar.builder()
+    private Avatar create(Long id, MultipartFile multipartFile) {
+        Student student = studentService.getStudentById(id);
+        return Avatar.builder()
                 .fileSize(multipartFile.getSize())
                 .mediaType(multipartFile.getContentType())
+                .student(student)
                 .build();
-        return avatarRepository.save(avatar);
     }
 
     private byte[] generateImagePreview(Path filePath) throws IOException {
@@ -85,10 +89,10 @@ public class AvatarService {
                 .substring(filename.lastIndexOf(".") + 1);
     }
 
-    public void deleteAvatarById(Long avatarId) {
-        getAvatarById(avatarId);
+    public void deleteAvatarById(Long id) {
+        getAvatarById(id);
         avatarRepository
-                .removeAvatarById(avatarId);
+                .removeAvatarById(id);
     }
 
     public ResponseEntity<byte[]> readFromDb(Long id) {
@@ -121,10 +125,10 @@ public class AvatarService {
                 .toList();
     }
 
-    protected Avatar getAvatarById(Long avatarId) {
+    protected Avatar getAvatarById(Long id) {
         return avatarRepository
-                .findById(avatarId)
-                .orElseThrow(() -> new EntryNotFoundException("Avatar with id=" + avatarId + " doesn't exist",
+                .findById(id)
+                .orElseThrow(() -> new EntryNotFoundException("Avatar with id=" + id + " doesn't exist",
                         "The specified avatar not found"));
     }
 }

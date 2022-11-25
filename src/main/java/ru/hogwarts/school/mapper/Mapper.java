@@ -11,14 +11,12 @@ import ru.hogwarts.school.model.dto.AvatarDto;
 import ru.hogwarts.school.model.dto.FacultyDto;
 import ru.hogwarts.school.model.dto.NewStudentDto;
 import ru.hogwarts.school.model.dto.StudentDto;
-import ru.hogwarts.school.repository.AvatarRepository;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 @Component
 @RequiredArgsConstructor
 public class Mapper {
     private final ModelMapper modelMapper;
-    private final AvatarRepository avatarRepository;
     private final FacultyRepository facultyRepository;
 
     public AvatarDto toDto(Avatar avatar) {
@@ -45,15 +43,6 @@ public class Mapper {
         Student.StudentBuilder student = Student.builder()
                 .age(studentDto.getAge())
                 .name(studentDto.getName());
-        Avatar avatar = null;
-        if (studentDto.getAvatarId() != null && studentDto.getAvatarId() > 0) {
-            avatar = avatarRepository
-                    .findById(studentDto.getAvatarId())
-                    .orElseThrow(
-                            () -> new EntryNotFoundException("Avatar with id=" + studentDto.getAvatarId() + " doesn't exist",
-                                    "The specified avatar not found")
-                    );
-        }
         Faculty faculty = null;
         if (studentDto.getFacultyId() != null && studentDto.getFacultyId() > 0) {
             faculty = facultyRepository
@@ -65,7 +54,6 @@ public class Mapper {
         }
         return student
                 .faculty(faculty)
-                .avatar(avatar)
                 .build();
     }
 }

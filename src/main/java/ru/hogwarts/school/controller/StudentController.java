@@ -61,12 +61,6 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getFacultyByStudent(studentId));
     }
 
-    @PatchMapping("/{id}/avatar")
-    public ResponseEntity<StudentDto> patchStudentAvatar(@PathVariable long id,
-                                                         @RequestParam("avatarId") long avatarId) {
-        return ResponseEntity.ok(studentService.patchStudentAvatar(id, avatarId));
-    }
-
     @GetMapping(value = "/parallel", params = "letter")
     public ResponseEntity<Collection<String>> getAllStudentNamesStarting(@RequestParam("letter")
                                                                          @Pattern(regexp = "[a-zA-Z]", message = "Enter only one starting letter")

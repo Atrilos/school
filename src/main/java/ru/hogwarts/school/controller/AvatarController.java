@@ -18,9 +18,10 @@ public class AvatarController {
 
     private final AvatarService avatarService;
 
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadAvatar(@RequestParam MultipartFile avatar) throws IOException {
-        avatarService.uploadAvatar(avatar);
+    @PostMapping(value = "/{id}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> uploadAvatar(@PathVariable Long id,
+                                             @RequestParam MultipartFile avatar) throws IOException {
+        avatarService.uploadAvatar(id, avatar);
         return ResponseEntity.ok().build();
     }
 
@@ -35,8 +36,8 @@ public class AvatarController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void deleteAvatar(@PathVariable(name = "id") Long avatarId) {
-        avatarService.deleteAvatarById(avatarId);
+    public void deleteAvatar(@PathVariable(name = "id") Long id) {
+        avatarService.deleteAvatarById(id);
     }
 
     @GetMapping
