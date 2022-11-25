@@ -3,4 +3,6 @@ databaseChangeLog:
       file: liquibase/scripts/index-practice.sql
   - include:
       file: liquibase/scripts/diff-change-log.yml
+  - include:
+      file: liquibase/scripts/cascade-fk-avatar.sql
 

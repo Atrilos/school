@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.hogwarts.school.exceptions.EntryNotFoundException;
 import ru.hogwarts.school.mapper.Mapper;
-import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.model.dto.FacultyDto;
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 public class StudentService {
 
     private final FacultyService facultyService;
-    private final AvatarService avatarService;
     private final StudentRepository studentRepository;
     private final Mapper mapper;
     @Qualifier("threadA")
@@ -61,15 +59,8 @@ public class StudentService {
             faculty = facultyService.getFacultyById(student.getFacultyId());
         }
 
-        Avatar avatar = null;
-        if (student.getAvatarId() != null) {
-            log.info(", new avatar id={}", student.getAvatarId());
-            avatar = avatarService.getAvatarById(student.getAvatarId());
-        }
-
         foundStudent.setName(student.getName());
         foundStudent.setFaculty(faculty);
-        foundStudent.setAvatar(avatar);
         return mapper.toDto(studentRepository.save(foundStudent));
     }
 
@@ -99,8 +90,8 @@ public class StudentService {
         log.info("Get the faculty of student with id={}", studentId);
         Faculty faculty = studentRepository
                 .findStudentsFaculty(studentId)
-                .orElseThrow(() -> new EntryNotFoundException("Student with id=" + studentId + " doesn't exist!",
-                        "The specified student not found"));
+                .orElseThrow(() -> new EntryNotFoundException("Student with id=" + studentId + " doesn't exist or no faculty associated with given student!",
+                        "The specified student not found or no faculty associated with given student"));
         return mapper.toDto(faculty);
     }
 
@@ -108,15 +99,6 @@ public class StudentService {
         log.info("Get student with id={}", id);
         Student foundStudent = getStudentById(id);
         return mapper.toDto(foundStudent);
-    }
-
-    @Transactional
-    public StudentDto patchStudentAvatar(long id, long avatarId) {
-        log.info("Add avatar with id={} to student with id={}", avatarId, id);
-        Student student = getStudentById(id);
-        Avatar avatar = avatarService.getAvatarById(avatarId);
-        student.setAvatar(avatar);
-        return mapper.toDto(studentRepository.save(student));
     }
 
     protected Student getStudentById(Long id) {

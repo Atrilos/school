@@ -22,8 +22,6 @@ import java.util.Objects;
 public class Avatar {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
     @Column(name = "file_path")
     private String filePath;
@@ -33,6 +31,12 @@ public class Avatar {
     private String mediaType;
     @Column(name = "data")
     private byte[] data;
+    @OneToOne(
+            optional = false,
+            fetch = FetchType.LAZY
+    )
+    @MapsId
+    private Student student;
 
     @Override
     public boolean equals(Object o) {

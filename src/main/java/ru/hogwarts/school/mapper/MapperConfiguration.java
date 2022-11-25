@@ -19,6 +19,11 @@ public class MapperConfiguration {
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
+        addMappingsAvatarToAvatarDto(mapper);
+        return mapper;
+    }
+
+    private void addMappingsAvatarToAvatarDto(ModelMapper mapper) {
         TypeMap<Avatar, AvatarDto> typeMap = mapper.createTypeMap(Avatar.class, AvatarDto.class);
         Converter<Long, String> idToUrl = new AbstractConverter<>() {
             @Override
@@ -27,6 +32,5 @@ public class MapperConfiguration {
             }
         };
         typeMap.addMappings(m -> m.using(idToUrl).map(Avatar::getId, AvatarDto::setUrl));
-        return mapper;
     }
 }

@@ -30,8 +30,7 @@ public class Student {
     )
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "avatar_id", unique = true)
+    @OneToOne(mappedBy = "student")
     private Avatar avatar;
 
     @Override
@@ -61,7 +60,7 @@ public class Student {
                 name,
                 age,
                 faculty != null ? faculty.getId() : "null",
-                avatar != null ? avatar.getId() : "null"
+                id
         );
     }
 }

@@ -14,5 +14,4 @@ public class NewStudentDto {
     private String name;
     private int age;
     private Long facultyId;
-    private Long avatarId;
 }
